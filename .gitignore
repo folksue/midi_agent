@@ -1,0 +1,30 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.pytest_cache/
+.mypy_cache/
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+
+# Runtime outputs
+metrics.jsonl
+*.jsonl
+*.log
+logs/
+/tmp/
+benchmark/results/
+benchmark/data/views/
+benchmark/data/raw_note_level/
+
+# Local toolchain/install artifacts
+.local/
+Miniconda3.sh
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
