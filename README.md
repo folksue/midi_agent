@@ -44,7 +44,7 @@ See:
 - `benchmark/README.md`
 
 Quick run:
-- `bash scripts/run_sequence_benchmark.sh 200 agent_like`
+- `bash benchmark/scripts/run_ollama_bench_suite.sh 200 agent_like`
 
 Batch inference:
 - Ollama list runner:
@@ -53,4 +53,3 @@ Batch inference:
   - `bash benchmark/scripts/run_ollama_bench_suite.sh`
 - API list runner:
   - `python -m benchmark.scripts.run_api_model_list ...`
-

@@ -27,9 +27,8 @@ No train/dev/test split is used.
 - `benchmark/data/views/remilike/zero_shot.jsonl`
 
 3. Model-ready case JSON (prompt + GT):
-- `benchmark/data/model_io/note_level/sequence_cases.json`
-- `benchmark/data/model_io/midilike/sequence_cases.json`
-- `benchmark/data/model_io/remilike/sequence_cases.json`
+- `benchmark/data/model_io/<tokenizer>/label_cases.json`
+- `benchmark/data/model_io/<tokenizer>/sequence_cases.json`
 - By-task split files are also supported (one file per task):
   - `benchmark/data/model_io/<tokenizer>/by_task/task4_transposition.json`
   - `benchmark/data/model_io/<tokenizer>/by_task/task5_melodic_inversion.json`
@@ -84,15 +83,38 @@ melody=t=0 d=0.5 notes=[62] v=80 | t=0.5 d=0.25 notes=[70] v=80 | ...
 
 ## How To Regenerate
 
-### Label tasks (Task 1/2/3/8)
+### Unified one-command suite (recommended)
 ```bash
-bash scripts/run_label_benchmark.sh 200 agent_like
+bash benchmark/scripts/run_ollama_bench_suite.sh 200 agent_like
 ```
 
-### Recommended one-command flow
+The suite does all of these in one run:
+1. Generate label + sequence benchmark cases.
+2. Export tokenizer views and build model IO JSON.
+3. Run local models (`ollama:*`) and API models (`openai:*`, `gemini:*`) from one model list.
+
+Core env controls:
 ```bash
-bash scripts/run_sequence_benchmark.sh 200 agent_like
+BENCHMARK_MODELS=ollama:qwen2.5:7b,openai:gpt-4o-mini,gemini:gemini-2.5-flash \
+BENCHMARK_TASK_GROUPS=label,sequence \
+BENCHMARK_TOKENIZERS=note_level,midilike,remilike \
+BENCHMARK_RUN_MODELS=1 \
+BENCHMARK_OPENAI_API_KEY=<your_openai_key> \
+BENCHMARK_GEMINI_API_KEY=<your_gemini_key> \
+bash benchmark/scripts/run_ollama_bench_suite.sh 200 agent_like
 ```
+
+Provider prefixes in `BENCHMARK_MODELS`:
+- `ollama:<model>`
+- `openai:<model>`
+- `gemini:<model>`
+
+Example:
+- `ollama:qwen2.5:7b,openai:gpt-4o-mini,gemini:gemini-2.5-flash`
+
+Benchmark keys are separate from agent keys:
+- OpenAI: `BENCHMARK_OPENAI_API_KEY` (fallback `OPENAI_API_KEY`)
+- Gemini: `BENCHMARK_GEMINI_API_KEY` (fallback `GEMINI_API_KEY`)
 
 ### Manual flow
 ```bash
@@ -160,25 +182,15 @@ python -m benchmark.scripts.annotate_model_outputs \
 
 ## Batch Testing (Model Lists)
 
-Ollama:
+Unified suite wrapper:
 ```bash
-python -m benchmark.scripts.run_ollama_model_list \
-  --cases-list benchmark/data/model_io/note_level/sequence_cases.json,benchmark/data/model_io/midilike/sequence_cases.json \
-  --models qwen2.5:3b,qwen2.5:7b \
-  --out-dir benchmark/results/ollama_multi
+bash benchmark/scripts/run_ollama_bench_suite.sh 200 agent_like
 ```
 
-Ollama suite wrapper:
+Optional lower-level runners:
 ```bash
-bash benchmark/scripts/run_ollama_bench_suite.sh
-```
-
-API models:
-```bash
-python -m benchmark.scripts.run_api_model_list \
-  --cases benchmark/data/model_io/note_level/sequence_cases.json \
-  --models gpt-4o-mini \
-  --out-dir benchmark/results/api
+python -m benchmark.scripts.run_ollama_model_list --cases-list <csv_cases> --models qwen2.5:7b
+python -m benchmark.scripts.run_api_model_list --cases-list <csv_cases> --models openai:gpt-4o-mini,gemini:gemini-2.5-flash
 ```
 
 ## Change Rule (for future prompt updates)
@@ -196,3 +208,4 @@ When prompt composition logic changes, update **this README** in the same commit
 - `benchmark/scripts/annotate_model_outputs.py` (hit + error metrics + by-task summary)
 - `benchmark/scripts/run_ollama_model_list.py` (Ollama model-list batch runner)
 - `benchmark/scripts/run_api_model_list.py` (API model-list batch runner)
+- `benchmark/scripts/run_ollama_bench_suite.sh` (unified end-to-end suite runner)
