@@ -5,7 +5,7 @@ This folder contains an editable slide deck for the benchmark and paper proposal
 ## What is here
 
 - `paper-proposal-deck.js`: source file that generates the presentation
-- `paper-proposal-deck.pptx`: editable PowerPoint output
+- `paper-proposal-deck.pptx`: PowerPoint-compatible editable output after LibreOffice normalization
 - `presentation-outline.md`: slide-by-slide outline for collaborative editing
 
 ## Why PowerPoint first
@@ -23,6 +23,13 @@ This keeps the source deck versionable in the repository while still allowing co
 ```bash
 npm --prefix docs/presentation run build
 ```
+
+This build now does two steps:
+
+1. generate a raw `.pptx` from PptxGenJS
+2. normalize it through LibreOffice into `paper-proposal-deck.pptx`
+
+The raw and round-trip intermediate files are build artifacts and are not meant to be shared. Upload or share the normalized `paper-proposal-deck.pptx`.
 
 ## Render to PNG
 

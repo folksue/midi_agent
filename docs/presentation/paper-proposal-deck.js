@@ -30,6 +30,7 @@ const COLORS = {
   paleGold: "FAF3E6",
   paleRose: "F9ECEE",
 };
+const EPS = 0.001;
 
 function addBase(slide, section, title, subtitle = "") {
   slide.background = { color: COLORS.bg };
@@ -77,7 +78,7 @@ function addBase(slide, section, title, subtitle = "") {
     x: 0.6,
     y: 1.82,
     w: 12.1,
-    h: 0,
+    h: EPS,
     line: { color: COLORS.line, pt: 1.25 },
   });
 }
@@ -189,11 +190,13 @@ function addFlowBox(slide, x, y, w, h, title, subtitle, fill = COLORS.panel) {
 }
 
 function addArrow(slide, x1, y1, x2, y2, color = COLORS.teal) {
+  const w = Math.abs(x2 - x1) < EPS ? (x2 >= x1 ? EPS : -EPS) : (x2 - x1);
+  const h = Math.abs(y2 - y1) < EPS ? (y2 >= y1 ? EPS : -EPS) : (y2 - y1);
   slide.addShape(pptx.ShapeType.line, {
     x: x1,
     y: y1,
-    w: x2 - x1,
-    h: y2 - y1,
+    w,
+    h,
     line: { color, pt: 1.6, endArrowType: "triangle" },
   });
 }
@@ -764,7 +767,7 @@ function finalize(slide, footer) {
     slide.addShape(pptx.ShapeType.line, {
       x: x + 0.58,
       y: 3.2,
-      w: 0,
+      w: EPS,
       h: 2.15,
       line: { color: COLORS.line, pt: 1, dash: "dash" },
     });
@@ -822,7 +825,7 @@ function finalize(slide, footer) {
 }
 
 async function main() {
-  await pptx.writeFile({ fileName: path.join(__dirname, "paper-proposal-deck.pptx") });
+  await pptx.writeFile({ fileName: path.join(__dirname, "paper-proposal-deck-raw.pptx") });
 }
 
 main().catch((err) => {

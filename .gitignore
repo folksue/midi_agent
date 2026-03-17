@@ -28,6 +28,8 @@ benchmark/data/raw_note_level/
 Miniconda3.sh
 docs/presentation/node_modules/
 docs/presentation/rendered/
+docs/presentation/roundtrip/
+docs/presentation/*-raw.pptx
 
 # OS/editor noise
 .DS_Store
