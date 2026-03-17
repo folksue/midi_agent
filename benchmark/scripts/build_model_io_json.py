@@ -32,6 +32,20 @@ TASK_GROUPS = {
     },
 }
 
+LABEL_TASKS = {
+    "task1_interval_identification",
+    "task2_chord_identification",
+    "task3_harmonic_function",
+    "task8_voice_leading",
+}
+
+SEQUENCE_TASKS = {
+    "task4_transposition",
+    "task5_melodic_inversion",
+    "task6_retrograde",
+    "task7_rhythm_scale",
+}
+
 
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description="Build model-ready benchmark cases (JSON array).")
@@ -79,9 +93,9 @@ def main() -> int:
 
         melody_input_tokens = ""
         melody_target_tokens = ""
-        if isinstance(payload, dict) and isinstance(payload.get("melody"), list):
+        if task in SEQUENCE_TASKS and isinstance(payload, dict) and isinstance(payload.get("melody"), list):
             melody_input_tokens = render_by_tokenizer(tokenizer, payload["melody"])
-        if isinstance(target_payload, list):
+        if task in SEQUENCE_TASKS and isinstance(target_payload, list):
             melody_target_tokens = render_by_tokenizer(tokenizer, target_payload)
 
         control_params = {}
@@ -89,9 +103,18 @@ def main() -> int:
             if k in payload:
                 control_params[k] = payload[k]
 
-        question_prefix = f"Task={task}\nTokenizer={tokenizer}\nAnswer with only one line final output."
+        if task in LABEL_TASKS:
+            question_prefix = f"Task={task}\nTokenizer={tokenizer}\nAnswer with only one label token."
+        else:
+            question_prefix = f"Task={task}\nTokenizer={tokenizer}\nAnswer with only one line final output."
         question_body = ""
-        if task == "task4_transposition":
+        if task == "task1_interval_identification":
+            question_body = "Interval Identification"
+        elif task == "task2_chord_identification":
+            question_body = "Chord Identification"
+        elif task == "task3_harmonic_function":
+            question_body = "Harmonic Function Classification"
+        elif task == "task4_transposition":
             question_body = "Transposition"
         elif task == "task5_melodic_inversion":
             question_body = "Melodic Inversion"
@@ -99,21 +122,49 @@ def main() -> int:
             question_body = "Retrograde"
         elif task == "task7_rhythm_scale":
             question_body = "Rhythm Scale"
+        elif task == "task8_voice_leading":
+            question_body = "Voice-Leading Violation Detection"
 
+        answer_constraint = (
+            "Return only one label token string."
+            if task in LABEL_TASKS
+            else "Return only transformed melody tokens, one line."
+        )
         prompt_parts = {
             "question_prefix": question_prefix,
             "question_body": question_body,
             "control_params": control_params,
-            "melody_input_tokens": melody_input_tokens,
-            "answer_constraint": "Return only transformed melody tokens, one line.",
+            "answer_constraint": answer_constraint,
         }
+        if melody_input_tokens:
+            prompt_parts["melody_input_tokens"] = melody_input_tokens
 
         # Build an optional recomposed prompt from prompt_parts for ablation experiments.
         param_line = " ".join(f"{k}={v}" for k, v in control_params.items())
         composed_lines = [question_prefix, "Question:", question_body]
         if param_line:
             composed_lines.append(param_line)
-        if melody_input_tokens:
+        if task in LABEL_TASKS:
+            if task == "task1_interval_identification":
+                composed_lines.append(
+                    f"notes={render_by_tokenizer(tokenizer, payload.get('notes', []))}"
+                )
+            elif task == "task2_chord_identification":
+                composed_lines.append(
+                    f"notes={render_by_tokenizer(tokenizer, payload.get('notes', []))}"
+                )
+            elif task == "task3_harmonic_function":
+                composed_lines.append(
+                    f"key={payload.get('key', '')} chord={payload.get('chord', '')}"
+                )
+            elif task == "task8_voice_leading":
+                composed_lines.append(
+                    f"t0={render_by_tokenizer(tokenizer, payload.get('voices_t0', []))}"
+                )
+                composed_lines.append(
+                    f"t1={render_by_tokenizer(tokenizer, payload.get('voices_t1', []))}"
+                )
+        elif melody_input_tokens:
             composed_lines.append(f"melody={melody_input_tokens}")
         user_prompt_recomposed = "\n".join(composed_lines)
 

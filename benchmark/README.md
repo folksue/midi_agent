@@ -3,7 +3,13 @@
 This folder contains a zero-shot music reasoning benchmark with tokenizer views.
 
 ## Scope
-Current focus is sequence transformation tasks:
+Current benchmark supports:
+- Label tasks:
+  - `task1_interval_identification`
+  - `task2_chord_identification`
+  - `task3_harmonic_function`
+  - `task8_voice_leading`
+- Sequence transformation tasks:
 - `task4_transposition`
 - `task5_melodic_inversion`
 - `task6_retrograde`
@@ -78,6 +84,11 @@ melody=t=0 d=0.5 notes=[62] v=80 | t=0.5 d=0.25 notes=[70] v=80 | ...
 
 ## How To Regenerate
 
+### Label tasks (Task 1/2/3/8)
+```bash
+bash scripts/run_label_benchmark.sh 200 agent_like
+```
+
 ### Recommended one-command flow
 ```bash
 bash scripts/run_sequence_benchmark.sh 200 agent_like
@@ -113,6 +124,15 @@ python -m benchmark.scripts.build_model_io_json \
 ```
 
 ## Evaluation
+Label tasks:
+```bash
+python -m benchmark.scripts.eval_label_predictions \
+  --gold benchmark/data/views/note_level/zero_shot.jsonl \
+  --pred <predictions.jsonl> \
+  --out benchmark/results/label_eval.json
+```
+
+Sequence tasks:
 ```bash
 python -m benchmark.scripts.eval_sequence_predictions \
   --gold benchmark/data/views/note_level/zero_shot.jsonl \
