@@ -1,0 +1,9 @@
+# Core benchmark / notebook environment
+jupyterlab>=4.2
+ipykernel>=6.29
+
+# Model API support
+openai>=1.30
+
+# Symbolic MIDI support
+mido>=1.3

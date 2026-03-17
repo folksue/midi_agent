@@ -6,6 +6,29 @@ Related notebook:
 
 - `symbolic-music-benchmark-review.ipynb`
 
+## Recommended environment setup
+
+Create a dedicated virtual environment named `asmcm-env`:
+
+```bash
+bash scripts/setup_asmcm_env.sh
+```
+
+This script will:
+
+- create the `asmcm-env` virtual environment
+- install dependencies from `requirements.txt`
+- leave a ready-to-use Python environment that VS Code or Jupyter can detect
+
+Manual alternative:
+
+```bash
+python3 -m venv asmcm-env
+source asmcm-env/bin/activate
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+```
+
 ## Who this is for
 
 This guide is intended for users who are not experts in the internal codebase.
