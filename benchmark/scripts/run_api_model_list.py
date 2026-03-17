@@ -10,6 +10,8 @@ import sys
 import time
 from pathlib import Path
 
+from benchmark.core.predictions import make_prediction_row
+
 # Edit this list for batch tests.
 API_MODELS = [
     "gpt-4o-mini",
@@ -83,10 +85,13 @@ def run_one_model(args: argparse.Namespace, client, model: str, cases: list[dict
             ]
             try:
                 out = api_generate(client, model, messages, args.temperature, args.timeout)
+                err = ""
             except Exception as exc:
                 out = ""
+                err = str(exc)
                 print(f"[warn] model={model} case={cid} error={exc}")
-            f.write(json.dumps({"case_id": cid, "prediction": out}, ensure_ascii=False) + "\n")
+            row = make_prediction_row(c, out, error=err)
+            f.write(json.dumps(row, ensure_ascii=False) + "\n")
             if i % 10 == 0 or i == total:
                 print(f"[api] model={model} progress={i}/{total}")
             if args.sleep > 0:

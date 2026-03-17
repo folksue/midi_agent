@@ -13,6 +13,8 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
+from benchmark.core.predictions import make_prediction_row
+
 # Edit this list for batch tests.
 OLLAMA_MODELS = [
     "qwen2.5:3b",
@@ -166,9 +168,7 @@ def run_one_model(
                 out = ""
                 err = str(exc)
                 print(f"[warn] model={model} case={cid} error={exc}")
-            row = {"case_id": cid, "prediction": out}
-            if err:
-                row["error"] = err
+            row = make_prediction_row(c, out, error=err)
             f.write(json.dumps(row, ensure_ascii=False) + "\n")
             if i % 10 == 0 or i == total:
                 print(f"[ollama] model={model} progress={i}/{total}")

@@ -5,32 +5,17 @@ import argparse
 import json
 from pathlib import Path
 
+from benchmark.core.musicology import EXPLANATION_POLICY, THEORETICAL_SIMPLIFICATIONS, label_task_explanation
+from benchmark.core.task_specs import (
+    LABEL_TASKS,
+    SEQUENCE_TASKS,
+    TASK_GROUPS,
+    TASK_TITLES,
+    label_space_for_task,
+    prediction_kind_for_task,
+    primary_prediction_field_for_task,
+)
 from benchmark.tokenizers import render_by_tokenizer
-
-TASK_GROUPS = {
-    "all": {
-        "task1_interval_identification",
-        "task2_chord_identification",
-        "task3_harmonic_function",
-        "task4_transposition",
-        "task5_melodic_inversion",
-        "task6_retrograde",
-        "task7_rhythm_scale",
-        "task8_voice_leading",
-    },
-    "label": {
-        "task1_interval_identification",
-        "task2_chord_identification",
-        "task3_harmonic_function",
-        "task8_voice_leading",
-    },
-    "sequence": {
-        "task4_transposition",
-        "task5_melodic_inversion",
-        "task6_retrograde",
-        "task7_rhythm_scale",
-    },
-}
 
 
 def parse_args() -> argparse.Namespace:
@@ -61,7 +46,7 @@ def main() -> int:
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
 
-    selected_tasks = {t.strip() for t in args.tasks.split(",") if t.strip()} or TASK_GROUPS[args.task_group]
+    selected_tasks = {t.strip() for t in args.tasks.split(",") if t.strip()} or set(TASK_GROUPS[args.task_group])
     rows = _load_jsonl(src)
 
     cases: list[dict] = []
@@ -76,6 +61,9 @@ def main() -> int:
         prompt_mode = str(r.get("meta", {}).get("prompt_mode", "light"))
         payload = r.get("payload", {}) or {}
         target_payload = r.get("target_payload", {})
+        prediction_kind = prediction_kind_for_task(task)
+        primary_prediction_field = primary_prediction_field_for_task(task)
+        target_explanation = label_task_explanation(task, payload, ground_truth) if task in LABEL_TASKS else ""
 
         melody_input_tokens = ""
         melody_target_tokens = ""
@@ -90,31 +78,35 @@ def main() -> int:
                 control_params[k] = payload[k]
 
         question_prefix = f"Task={task}\nTokenizer={tokenizer}\nAnswer with only one line final output."
-        question_body = ""
-        if task == "task4_transposition":
-            question_body = "Transposition"
-        elif task == "task5_melodic_inversion":
-            question_body = "Melodic Inversion"
-        elif task == "task6_retrograde":
-            question_body = "Retrograde"
-        elif task == "task7_rhythm_scale":
-            question_body = "Rhythm Scale"
+        question_body = TASK_TITLES.get(task, "")
+
+        expected_label_space = label_space_for_task(task) if task in LABEL_TASKS else []
+        input_label_context = r.get("input_tokenized", r.get("input", "")) if task in LABEL_TASKS else ""
 
         prompt_parts = {
             "question_prefix": question_prefix,
             "question_body": question_body,
             "control_params": control_params,
             "melody_input_tokens": melody_input_tokens,
-            "answer_constraint": "Return only transformed melody tokens, one line.",
+            "input_label_context": input_label_context,
+            "expected_label_space": expected_label_space,
+            "answer_constraint": (
+                "Return only the final label token, one line."
+                if task in LABEL_TASKS
+                else "Return only transformed melody tokens, one line."
+            ),
         }
 
         # Build an optional recomposed prompt from prompt_parts for ablation experiments.
         param_line = " ".join(f"{k}={v}" for k, v in control_params.items())
-        composed_lines = [question_prefix, "Question:", question_body]
-        if param_line:
-            composed_lines.append(param_line)
-        if melody_input_tokens:
-            composed_lines.append(f"melody={melody_input_tokens}")
+        if input_label_context and task in LABEL_TASKS:
+            composed_lines = [question_prefix, "Question:", input_label_context]
+        else:
+            composed_lines = [question_prefix, "Question:", question_body]
+            if param_line:
+                composed_lines.append(param_line)
+            if melody_input_tokens:
+                composed_lines.append(f"melody={melody_input_tokens}")
         user_prompt_recomposed = "\n".join(composed_lines)
 
         case = {
@@ -122,6 +114,45 @@ def main() -> int:
             "task": task,
             "tokenizer": tokenizer,
             "prompt_mode": prompt_mode,
+            "prediction_type": prediction_kind,
+            "prediction_kind": prediction_kind,
+            "prediction_schema": {
+                "prediction_type": prediction_kind,
+                "primary_field": primary_prediction_field,
+                "optional_fields": (
+                    ["prediction_explanation"]
+                    if task in LABEL_TASKS
+                    else ["prediction_structured"]
+                ),
+                "fallback_fields": ["prediction"],
+            },
+            "usage_modes": {
+                "standard": {
+                    "required_prediction_fields": [primary_prediction_field],
+                    "optional_prediction_fields": [],
+                    "description": (
+                        "Default benchmark mode for non-expert users. "
+                        "Focus on strict, automatically evaluable outputs."
+                    ),
+                },
+                "explanatory": {
+                    "required_prediction_fields": [primary_prediction_field],
+                    "optional_prediction_fields": (
+                        ["prediction_explanation"] if task in LABEL_TASKS else []
+                    ),
+                    "description": (
+                        "Optional analysis mode for paper-oriented qualitative work. "
+                        "The main label or note prediction remains primary; "
+                        "prediction_explanation is supplementary."
+                    ),
+                },
+            },
+            "musicology_schema": {
+                "explanation_policy": EXPLANATION_POLICY,
+                "prediction_explanation_supported": task in LABEL_TASKS,
+                "target_explanation_available": bool(target_explanation),
+                "theoretical_simplifications": THEORETICAL_SIMPLIFICATIONS,
+            },
             "messages": [
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt},
@@ -134,8 +165,11 @@ def main() -> int:
             "user_prompt_recomposed": user_prompt_recomposed,
             "melody_input_tokens": melody_input_tokens,
             "melody_target_tokens": melody_target_tokens,
+            "input_label_context": input_label_context,
+            "expected_label_space": expected_label_space,
             "control_params": control_params,
             "ground_truth": ground_truth,
+            "target_explanation": target_explanation,
             "input_tokenized": r.get("input_tokenized", r.get("input", "")),
             "output_tokenized": r.get("output_tokenized", r.get("target", "")),
             "payload": payload,

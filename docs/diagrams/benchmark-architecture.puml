@@ -1,0 +1,60 @@
+@startuml
+title Benchmark Architecture
+left to right direction
+
+rectangle "Benchmark Core" {
+  component "rules.py\nsymbolic theory rules" as Rules
+  component "task_specs.py\ntask groups / label spaces" as Specs
+  component "render.py\nprompt construction" as Render
+  component "tokenizers.py\nnote_level / midilike / remilike" as Tok
+  component "musicology.py\nreference explanations" as Musicology
+  component "predictions.py\ncanonical prediction helpers" as Pred
+}
+
+rectangle "Benchmark Data" {
+  database "raw note-level jsonl" as Raw
+  database "tokenizer views" as Views
+  database "model-ready cases json" as Cases
+}
+
+rectangle "Benchmark Runtime" {
+  component "run_api_model_list.py" as Api
+  component "run_ollama_model_list.py" as Ollama
+  database "predictions.jsonl" as PredOut
+}
+
+rectangle "Evaluation and Analysis" {
+  component "eval_predictions.py" as Eval
+  component "eval_sequence_predictions.py" as SeqEval
+  component "annotate_model_outputs.py" as Annotate
+  database "overall / by_task / by_tokenizer" as Metrics
+  database "cases_with_outputs / summary" as Review
+}
+
+rectangle "Usage Modes" {
+  component "Standard mode\nprediction_label / prediction_notes" as Standard
+  component "Explanatory mode\noptional prediction_explanation" as Explain
+}
+
+Rules --> Raw
+Tok --> Views
+Raw --> Views
+Views --> Cases
+Specs --> Cases
+Render --> Cases
+Musicology --> Cases
+Pred --> Api
+Pred --> Ollama
+Cases --> Api
+Cases --> Ollama
+Api --> PredOut
+Ollama --> PredOut
+PredOut --> Eval
+PredOut --> SeqEval
+PredOut --> Annotate
+Eval --> Metrics
+Annotate --> Review
+Standard --> Eval
+Explain --> Annotate
+
+@enduml

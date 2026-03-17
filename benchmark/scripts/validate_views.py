@@ -5,14 +5,8 @@ import argparse
 import json
 from pathlib import Path
 
+from benchmark.core.task_specs import SEQUENCE_TASKS
 from benchmark.tokenizers import decode_melody_by_tokenizer
-
-SEQ_TASKS = {
-    "task4_transposition",
-    "task5_melodic_inversion",
-    "task6_retrograde",
-    "task7_rhythm_scale",
-}
 
 
 def parse_args() -> argparse.Namespace:
@@ -51,7 +45,7 @@ def main() -> int:
     checked = 0
     for i, rid in enumerate(base_ids):
         task = base_rows[i]["task"]
-        if task not in SEQ_TASKS:
+        if task not in SEQUENCE_TASKS:
             continue
         ref = base_rows[i]["target_payload"]
         for t in toks:
