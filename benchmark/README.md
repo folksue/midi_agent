@@ -148,6 +148,32 @@ The benchmark intentionally uses a constrained symbolic-theory scope in V1.
 
 These simplifications should be stated explicitly in the paper.
 
+## Current V1 scope
+
+The current benchmark should be presented as a V1 scope definition rather than as final theoretical coverage.
+
+- V1 is intentionally constrained so that generation, prompting, prediction formatting, and evaluation remain reproducible
+- V1 is also meant to stay understandable for non-expert users who only need a clean benchmark workflow
+- the benchmark therefore focuses on a tractable symbolic subset of tonal reasoning instead of full analytical coverage
+
+## Planned extensions
+
+The current implementation is compatible with future expansion in at least the following directions.
+
+- harmonic-function coverage beyond major mode
+- richer voice-leading scenarios beyond two voices
+- broader harmonic vocabularies and sonority types
+- more analytical explanation studies built around `prediction_explanation`
+- stronger paper-oriented comparisons between structural correctness and interpretive quality
+
+## Not yet final theoretical coverage
+
+The benchmark should not be described as exhaustive musicological coverage.
+
+- it is a reproducible V1 benchmark slice
+- it supports formal evaluation now
+- it leaves room for future modal, contrapuntal, and harmonic expansion in later versions of the paper
+
 ## How to regenerate
 
 ### Sequence-only shortcut

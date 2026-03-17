@@ -38,6 +38,8 @@ The benchmark has two usage modes:
 - `standard`: the default mode, simple and fully automatically evaluable
 - `explanatory`: an optional mode for qualitative analysis and paper-oriented interpretation
 
+This guide documents the current V1 scope of the benchmark. The benchmark is already usable and reproducible in this form, but its theoretical coverage is intentionally not final.
+
 ## Standard workflow
 
 If you want the simplest wrapper for non-expert users, you can start with:

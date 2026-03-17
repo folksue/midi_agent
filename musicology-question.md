@@ -140,6 +140,36 @@ The key rule is:
 - reduced harmonic vocabulary
 - focus on symbolic music, not audio
 
+## Current V1 scope
+
+The benchmark should present these simplifications as the current operational scope of V1.
+
+- V1 prioritizes reproducibility, clean automatic evaluation, and easy handoff to non-expert users
+- V1 therefore uses a constrained symbolic-theory slice rather than full tonal coverage
+- these constraints are implementation decisions for a first benchmark release, not a claim that the underlying musicological space is exhausted
+
+In other words, the current benchmark is intentionally narrow enough to be testable, but broad enough to support a real music-theory and musicology discussion.
+
+## Planned extensions
+
+The documentation and the paper can already signal the benchmark's next expansion path.
+
+- extend harmonic-function coverage beyond major mode
+- extend voice-leading analysis beyond two-voice examples
+- expand the harmonic vocabulary and chord-template inventory
+- explore richer analytical explanation prompts and evaluation protocols
+- compare standard benchmark accuracy against explanation quality in a larger qualitative study
+
+## Not yet final theoretical coverage
+
+The current implementation should not be framed as the final theoretical boundary of the paper.
+
+- it is a V1 benchmark slice
+- it captures a defensible and reproducible subset of symbolic tonal reasoning
+- it leaves room for broader modal, harmonic, contrapuntal, and interpretive coverage in later iterations
+
+That wording makes the benchmark scientifically usable now, while keeping the paper open to future extensions.
+
 ## Operational conclusion
 
 The benchmark already has an implicit musicological basis.

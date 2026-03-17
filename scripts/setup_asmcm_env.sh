@@ -17,8 +17,12 @@ echo "[4/4] Verifying key imports inside the environment..."
 "${ENV_DIR}/bin/python" - <<'PY'
 import ipykernel
 import mido
+import numpy
 import openai
-print("Verified imports: ipykernel, mido, openai")
+import pdf2image
+import PIL
+import pptx
+print("Verified imports: ipykernel, mido, numpy, openai, pdf2image, PIL, pptx")
 PY
 
 echo ""

@@ -115,7 +115,12 @@ Current decision:
 - [x] document that harmonic function is limited to major mode in this version
 - [x] document that voice-leading is simplified to two voices
 - [x] document that the current harmonic vocabulary is reduced
-- [ ] indicate whether these decisions are temporary or part of the paper's intended scope
+- [x] indicate whether these decisions are temporary or part of the paper's intended scope
+
+Current decision:
+
+- these simplifications define the current V1 scope
+- they should be documented as planned extensions rather than final theoretical coverage
 
 ### 6. Update benchmark documentation
 
@@ -123,7 +128,7 @@ Current decision:
 - [x] document the use of `eval_predictions.py`
 - [x] add a JSONL prediction example
 - [x] add a non-expert user guide and diagrams
-- [ ] add secondary documentation so the project is more paper-ready and easier to hand off to other users
+- [x] add secondary documentation so the project is more paper-ready and easier to hand off to other users
 - [ ] update any remaining secondary benchmark docs if needed
 
 ### 7. Add benchmark-specific tests
@@ -159,3 +164,4 @@ These parts can be reused directly:
 
 - The current benchmark already provides a strong foundation for symbolic music and operationalized music theory.
 - What is missing is not a full rewrite of the repository, but a more complete interface, evaluation layer, and musicological framing.
+- The paper should present the benchmark as current V1 scope with planned extensions and not yet final theoretical coverage.

@@ -1,0 +1,44 @@
+@startuml
+title Benchmark Components
+
+package "Theory and task logic" {
+  [rules.py] as Rules
+  [task_specs.py] as TaskSpecs
+  [musicology.py] as Musicology
+}
+
+package "Representation and prompting" {
+  [render.py] as Render
+  [tokenizers.py] as Tokenizers
+  [predictions.py] as Predictions
+  [build_model_io_json.py] as BuildCases
+}
+
+package "Execution layer" {
+  [run_api_model_list.py] as ApiRunner
+  [run_ollama_model_list.py] as OllamaRunner
+}
+
+package "Evaluation and analysis" {
+  [eval_predictions.py] as Eval
+  [annotate_model_outputs.py] as Annotate
+  [results and summaries] as Results
+}
+
+Rules --> BuildCases
+TaskSpecs --> BuildCases
+Musicology --> BuildCases
+Render --> BuildCases
+Tokenizers --> BuildCases
+Predictions --> ApiRunner
+Predictions --> OllamaRunner
+BuildCases --> ApiRunner
+BuildCases --> OllamaRunner
+ApiRunner --> Eval
+ApiRunner --> Annotate
+OllamaRunner --> Eval
+OllamaRunner --> Annotate
+Eval --> Results
+Annotate --> Results
+
+@enduml
