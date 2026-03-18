@@ -10,11 +10,11 @@ participant "eval_predictions.py" as E
 participant "annotate_model_outputs.py" as A
 
 U -> G : Generate raw note-level benchmark
-G --> V : zero_shot.jsonl
+G --> V : zero_shot.json
 V --> C : tokenizer views
 C --> R : model-ready cases
-R --> E : predictions.jsonl
-R --> A : predictions.jsonl
+R --> E : predictions.json
+R --> A : predictions.json
 E --> U : overall / by_task / by_tokenizer
 A --> U : cases_with_outputs / summary
 
