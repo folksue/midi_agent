@@ -1,0 +1,11 @@
+{
+  "site_name": "Symbolic Music Benchmark Pages",
+  "generated_from_branch": "project-dev4paper",
+  "copied_assets": {
+    "oracle_eval": true,
+    "oracle_overall": true,
+    "oracle_by_task": true,
+    "oracle_summary": true,
+    "oracle_cases_sample": true
+  }
+}

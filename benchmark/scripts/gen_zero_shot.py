@@ -7,6 +7,7 @@ import random
 from pathlib import Path
 
 from benchmark.core.render import render_input, render_system_prompt, render_target, render_user_prompt
+from benchmark.core.task_specs import TASK_GROUPS
 from benchmark.core.rules import (
     CHORD_TEMPLATES,
     chord_label_from_root_quality,
@@ -22,34 +23,6 @@ from benchmark.core.rules import (
     to_note_dicts,
     transpose_melody,
 )
-
-
-TASKS = [
-    "task1_interval_identification",
-    "task2_chord_identification",
-    "task3_harmonic_function",
-    "task4_transposition",
-    "task5_melodic_inversion",
-    "task6_retrograde",
-    "task7_rhythm_scale",
-    "task8_voice_leading",
-]
-
-TASK_GROUPS = {
-    "all": TASKS,
-    "label": [
-        "task1_interval_identification",
-        "task2_chord_identification",
-        "task3_harmonic_function",
-        "task8_voice_leading",
-    ],
-    "sequence": [
-        "task4_transposition",
-        "task5_melodic_inversion",
-        "task6_retrograde",
-        "task7_rhythm_scale",
-    ],
-}
 
 DEFAULT_AGENT_CTX = {
     "bpm": 120,
@@ -334,7 +307,7 @@ def gen_one(task: str, rng: random.Random):
 def main() -> int:
     args = parse_args()
     rng = random.Random(args.seed)
-    selected_tasks = [t.strip() for t in args.tasks.split(",") if t.strip()] or TASK_GROUPS[args.task_group]
+    selected_tasks = [t.strip() for t in args.tasks.split(",") if t.strip()] or list(TASK_GROUPS[args.task_group])
 
     out_path = Path(args.out)
     out_path.parent.mkdir(parents=True, exist_ok=True)

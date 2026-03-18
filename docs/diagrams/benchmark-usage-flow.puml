@@ -1,0 +1,17 @@
+@startuml
+title Benchmark Usage Flow
+
+start
+:Generate raw benchmark data\n(gen_zero_shot.py);
+:Export tokenizer views\n(export_views.py);
+:Validate view consistency\n(validate_views.py);
+:Build model-ready cases\n(build_model_io_json.py);
+:Run model\n(run_api_model_list.py or run_ollama_model_list.py);
+:Write predictions.jsonl;
+:Evaluate with eval_predictions.py;
+:Annotate with annotate_model_outputs.py;
+:Review overall.json / by_task.json / by_tokenizer.json;
+:Review cases_with_outputs.json / summary.json;
+stop
+
+@enduml

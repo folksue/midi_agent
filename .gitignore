@@ -10,6 +10,8 @@ __pycache__/
 .env
 .env.*
 !.env.example
+asmcm-env/
+.venv/
 
 # Runtime outputs
 metrics.jsonl
@@ -24,6 +26,10 @@ benchmark/data/raw_note_level/
 # Local toolchain/install artifacts
 .local/
 Miniconda3.sh
+docs/presentation/node_modules/
+docs/presentation/rendered/
+docs/presentation/roundtrip/
+docs/presentation/*-raw.pptx
 
 # OS/editor noise
 .DS_Store

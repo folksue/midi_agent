@@ -5,14 +5,9 @@ import argparse
 import json
 from pathlib import Path
 
+from benchmark.core.predictions import get_prediction_notes
+from benchmark.core.task_specs import SEQUENCE_TASKS
 from benchmark.tokenizers import decode_melody_by_tokenizer
-
-SEQ_TASKS = {
-    "task4_transposition",
-    "task5_melodic_inversion",
-    "task6_retrograde",
-    "task7_rhythm_scale",
-}
 
 
 def parse_args() -> argparse.Namespace:
@@ -116,14 +111,6 @@ def _bar_valid(pred: list[dict]) -> bool:
             return False
     return True
 
-
-def _get_prediction_text(row: dict) -> str:
-    for k in ("prediction", "output", "pred", "answer"):
-        if k in row:
-            return str(row[k])
-    return ""
-
-
 def main() -> int:
     args = parse_args()
 
@@ -144,12 +131,12 @@ def main() -> int:
             "rhythm_preserve_sum": 0.0,
             "bar_valid_sum": 0.0,
         }
-        for t in sorted(SEQ_TASKS)
+        for t in sorted(SEQUENCE_TASKS)
     }
 
     for g in gold_rows:
         task = g["task"]
-        if task not in SEQ_TASKS:
+        if task not in SEQUENCE_TASKS:
             continue
         rec = per_task[task]
         rec["n"] += 1
@@ -161,8 +148,7 @@ def main() -> int:
             continue
 
         tokenizer = args.tokenizer or g.get("meta", {}).get("tokenizer") or "note_level"
-        pred_text = _get_prediction_text(p_row)
-        pred_notes = decode_melody_by_tokenizer(tokenizer, pred_text)
+        pred_notes = get_prediction_notes(p_row, task, tokenizer)
         ref_notes = g["target_payload"]
 
         rec["exact_match"] += int(_seq_exact(pred_notes, ref_notes))
@@ -197,7 +183,7 @@ def main() -> int:
     result = {
         "gold": args.gold,
         "pred": args.pred,
-        "tasks": {t: finalize(per_task[t]) for t in sorted(SEQ_TASKS)},
+        "tasks": {t: finalize(per_task[t]) for t in sorted(SEQUENCE_TASKS)},
     }
 
     out_path = Path(args.out)

@@ -1,0 +1,26 @@
+@startuml
+title Benchmark Sequence Diagram
+
+actor User as U
+participant "gen_zero_shot.py" as G
+participant "export_views.py" as V
+participant "build_model_io_json.py" as C
+participant "model runner" as R
+participant "eval_predictions.py" as E
+participant "annotate_model_outputs.py" as A
+
+U -> G : Generate raw note-level benchmark
+G --> V : zero_shot.json
+V --> C : tokenizer views
+C --> R : model-ready cases
+R --> E : predictions.json
+R --> A : predictions.json
+E --> U : overall / by_task / by_tokenizer
+A --> U : cases_with_outputs / summary
+
+note over E, A
+Standard mode scores labels or note sequences.
+Explanatory mode preserves optional prediction_explanation.
+end note
+
+@enduml

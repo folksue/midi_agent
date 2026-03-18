@@ -1,0 +1,36 @@
+# Publication Folder
+
+This folder contains a draft paper package based on the official ISMIR 2026 LaTeX template.
+
+Included files:
+
+- `main.tex`: prefilled draft focused on the symbolic benchmark project
+- `references.bib`: starter bibliography for the current draft
+- `ismir.sty`, `IEEEtran.bst`, `cite.sty`: official template files
+- `figures/`: local copies of benchmark diagrams used in the draft
+- `reviewer-checklist.md`: review-facing checklist based on the criteria currently guiding the paper
+
+## Compile locally
+
+With `tectonic`:
+
+```bash
+cd publication
+tectonic main.tex
+```
+
+If you prefer a traditional LaTeX flow:
+
+```bash
+cd publication
+pdflatex main.tex
+bibtex main
+pdflatex main.tex
+pdflatex main.tex
+```
+
+## Notes
+
+- The draft currently uses anonymized author metadata for a submission-style version.
+- The related-work section is intentionally compact and should be expanded before submission.
+- The results section is framed as preliminary validation plus expected outcomes, not as a final empirical paper.
