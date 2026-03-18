@@ -40,6 +40,28 @@ The benchmark has two usage modes:
 
 This guide documents the current V1 scope of the benchmark. The benchmark is already usable and reproducible in this form, but its theoretical coverage is intentionally not final.
 
+## Optional web UI
+
+If you want a local browser-based entry point instead of running each script manually, start:
+
+```bash
+bash scripts/run_benchmark_web.sh
+```
+
+Then open:
+
+```text
+http://127.0.0.1:8787
+```
+
+The web UI supports three simple workflows:
+
+- generate benchmark data
+- run an oracle demo with perfect reference predictions
+- evaluate an existing prediction file and inspect the resulting summaries
+
+This is meant for quick experimentation and teaching demos. The standard benchmark files still live in the same repository paths described below.
+
 ## Standard workflow
 
 If you want the simplest wrapper for non-expert users, you can start with:
@@ -168,6 +190,20 @@ After a normal run, the most useful files are:
 - `benchmark/results/by_tokenizer.json`
 - `benchmark/results/cases_with_outputs.json`
 - `benchmark/results/summary.json`
+
+If you use the web UI oracle/demo path, it also writes:
+
+- `benchmark/results/webui/oracle/<tokenizer>/predictions.jsonl`
+- `benchmark/results/webui/oracle/<tokenizer>/overall.json`
+- `benchmark/results/webui/oracle/<tokenizer>/by_task.json`
+- `benchmark/results/webui/oracle/<tokenizer>/cases_with_outputs.json`
+
+If you use the web UI to evaluate your own prediction file, it writes:
+
+- `benchmark/results/webui/custom/<tokenizer>/eval_<name>.json`
+- `benchmark/results/webui/custom/<tokenizer>/overall_<name>.json`
+- `benchmark/results/webui/custom/<tokenizer>/by_task_<name>.json`
+- `benchmark/results/webui/custom/<tokenizer>/cases_with_outputs_<name>.json`
 
 ## What standard users should do
 
