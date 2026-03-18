@@ -93,28 +93,43 @@ The suite does all of these in one run:
 2. Export tokenizer views and build model IO JSON.
 3. Run local models (`ollama:*`) and API models (`openai:*`, `gemini:*`) from one model list.
 
-Core env controls:
+API env controls:
 ```bash
-BENCHMARK_MODELS=ollama:qwen2.5:7b,openai:gpt-4o-mini,gemini:gemini-2.5-flash \
-BENCHMARK_TASK_GROUPS=label,sequence \
-BENCHMARK_TOKENIZERS=note_level,midilike,remilike \
-BENCHMARK_RUN_MODELS=1 \
-BENCHMARK_OPENAI_API_KEY=<your_openai_key> \
-BENCHMARK_GEMINI_API_KEY=<your_gemini_key> \
+OPENAI_API_KEY=<your_openai_key> \
+GEMINI_API_KEY=<your_gemini_key> \
 bash benchmark/scripts/run_ollama_bench_suite.sh 200 agent_like
 ```
 
-Provider prefixes in `BENCHMARK_MODELS`:
+Suite knobs are configured directly at the top of:
+- `benchmark/scripts/run_ollama_bench_suite.sh`
+
+Important knobs in script:
+- `MODEL_LIST`
+- `TASK_GROUP_LIST_DEFAULT`
+- `TOKENIZER_LIST_DEFAULT`
+- `REGEN_MODE` (`auto|always|never`)
+- `RUN_MODELS`
+- `OUT_DIR_TEMPLATE`
+
+Regeneration mode:
+- `REGEN_MODE=auto`: reuse existing `*_cases.json`, generate only when missing
+- `REGEN_MODE=always`: always regenerate benchmark data
+- `REGEN_MODE=never`: never regenerate; missing files cause failure
+
+Output directory supports timestamp placeholder in script:
+- `OUT_DIR_TEMPLATE="benchmark/results/suite_{ts}"`
+
+Provider prefixes in `MODEL_LIST`:
 - `ollama:<model>`
 - `openai:<model>`
 - `gemini:<model>`
 
-Example:
+MODEL_LIST example:
 - `ollama:qwen2.5:7b,openai:gpt-4o-mini,gemini:gemini-2.5-flash`
 
-Benchmark keys are separate from agent keys:
-- OpenAI: `BENCHMARK_OPENAI_API_KEY` (fallback `OPENAI_API_KEY`)
-- Gemini: `BENCHMARK_GEMINI_API_KEY` (fallback `GEMINI_API_KEY`)
+API keys are shared between agent and benchmark:
+- OpenAI: `OPENAI_API_KEY`
+- Gemini: `GEMINI_API_KEY`
 
 ### Manual flow
 ```bash

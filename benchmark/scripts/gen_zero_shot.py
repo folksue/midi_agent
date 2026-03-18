@@ -143,11 +143,24 @@ def _notes_to_events(melody: list[dict], velocity: int = 80) -> list[dict]:
     return out
 
 
+def _pitch_set_to_events(
+    notes: list[int],
+    *,
+    t: float = 0.0,
+    d: float = 1.0,
+    velocity: int = 80,
+) -> list[dict]:
+    return [
+        {"t": round(float(t), 6), "p": int(p), "d": round(float(d), 6), "v": int(velocity)}
+        for p in notes
+    ]
+
+
 def gen_task1(rng: random.Random) -> tuple[dict, str]:
     n1 = rng.randint(48, 72)
     semis = rng.choice([1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12])
     n2 = n1 + semis
-    payload = {"notes": [n1, n2]}
+    payload = {"notes": _pitch_set_to_events([n1, n2], t=0.0, d=1.0, velocity=80)}
     target = interval_label(n1, n2)
     return payload, target
 
@@ -157,13 +170,15 @@ def gen_task2(rng: random.Random) -> tuple[dict, str]:
     root_pc = rng.randint(0, 11)
     root_midi = 60 + root_pc
     notes = [root_midi + x for x in CHORD_TEMPLATES[quality]]
-    payload = {"notes": notes}
+    payload = {"notes": _pitch_set_to_events(notes, t=0.0, d=1.0, velocity=80)}
     target = chord_label_from_root_quality(root_pc, quality)
     return payload, target
 
 
 def gen_task3(rng: random.Random) -> tuple[dict, str]:
-    key_root_pc = rng.choice([0, 2, 4, 5, 7, 9, 11])
+    # Keep harmonic-function labeling well-defined without passing key in user prompt:
+    # fix context to C major and vary diatonic chord degree/quality.
+    key_root_pc = 0
     degree = rng.choice([0, 2, 4, 5, 7, 9, 11])
     chord_root_pc = (key_root_pc + degree) % 12
     if degree == 11:
@@ -172,9 +187,12 @@ def gen_task3(rng: random.Random) -> tuple[dict, str]:
         quality = "major"
     else:
         quality = "minor"
+    chord_root_midi = 60 + chord_root_pc
+    chord_notes = [chord_root_midi + x for x in CHORD_TEMPLATES[quality]]
     payload = {
-        "key": f"{pc_name(key_root_pc)}_major",
+        "key": "C_major",
         "chord": chord_label_from_root_quality(chord_root_pc, quality),
+        "chord_notes": _pitch_set_to_events(chord_notes, t=0.0, d=1.0, velocity=80),
     }
     target = harmonic_function_major(key_root_pc, chord_root_pc, quality)
     return payload, target
@@ -279,7 +297,10 @@ def gen_task8(rng: random.Random) -> tuple[dict, str]:
         if has_parallel_fifths(v1_t0, v2_t0, v1_t1, v2_t1) or has_voice_crossing(v1_t1, v2_t1):
             v2_t1 = min(v1_t1 - 1, v2_t0)
 
-    payload = {"voices_t0": [v1_t0, v2_t0], "voices_t1": [v1_t1, v2_t1]}
+    payload = {
+        "voices_t0": _pitch_set_to_events([v1_t0, v2_t0], t=0.0, d=1.0, velocity=80),
+        "voices_t1": _pitch_set_to_events([v1_t1, v2_t1], t=1.0, d=1.0, velocity=80),
+    }
 
     if has_parallel_fifths(v1_t0, v2_t0, v1_t1, v2_t1):
         target = "parallel_fifths"

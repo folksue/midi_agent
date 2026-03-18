@@ -41,7 +41,7 @@ def parse_args() -> argparse.Namespace:
         help="Comma-separated case json paths. If set, runs each benchmark file.",
     )
     p.add_argument("--models", default=",".join(API_MODELS), help="Comma-separated models, e.g. openai:gpt-4o-mini,gemini:gemini-2.5-flash")
-    p.add_argument("--default-provider", default=os.getenv("BENCHMARK_API_DEFAULT_PROVIDER", "openai"))
+    p.add_argument("--default-provider", default=os.getenv("API_DEFAULT_PROVIDER", "openai"))
     p.add_argument("--out-dir", default="benchmark/results/api")
     p.add_argument("--temperature", type=float, default=0.0)
     p.add_argument("--timeout", type=float, default=60.0)
@@ -49,22 +49,22 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--sleep", type=float, default=0.0)
     p.add_argument(
         "--api-key",
-        default=os.getenv("BENCHMARK_OPENAI_API_KEY", os.getenv("OPENAI_API_KEY", "")),
-        help="OpenAI key (BENCHMARK_OPENAI_API_KEY > OPENAI_API_KEY).",
+        default=os.getenv("OPENAI_API_KEY", ""),
+        help="OpenAI API key (default: OPENAI_API_KEY).",
     )
     p.add_argument(
         "--base-url",
-        default=os.getenv("BENCHMARK_OPENAI_BASE_URL", os.getenv("OPENAI_BASE_URL", "")),
-        help="OpenAI base URL (BENCHMARK_OPENAI_BASE_URL > OPENAI_BASE_URL).",
+        default=os.getenv("OPENAI_BASE_URL", ""),
+        help="OpenAI-compatible base URL (default: OPENAI_BASE_URL).",
     )
     p.add_argument(
         "--gemini-api-key",
-        default=os.getenv("BENCHMARK_GEMINI_API_KEY", os.getenv("GEMINI_API_KEY", "")),
-        help="Gemini key (BENCHMARK_GEMINI_API_KEY > GEMINI_API_KEY).",
+        default=os.getenv("GEMINI_API_KEY", ""),
+        help="Gemini API key (default: GEMINI_API_KEY).",
     )
     p.add_argument(
         "--gemini-endpoint",
-        default=os.getenv("BENCHMARK_GEMINI_ENDPOINT", "https://generativelanguage.googleapis.com/v1beta"),
+        default=os.getenv("GEMINI_API_ENDPOINT", "https://generativelanguage.googleapis.com/v1beta"),
         help="Gemini REST endpoint root.",
     )
     return p.parse_args()
@@ -115,7 +115,7 @@ def parse_model_specs(raw: str, default_provider: str) -> list[ModelSpec]:
 
 def get_openai_client(api_key: str, base_url: str):
     if not api_key:
-        raise RuntimeError("missing OpenAI API key: set --api-key or BENCHMARK_OPENAI_API_KEY or OPENAI_API_KEY")
+        raise RuntimeError("missing OpenAI API key: set --api-key or OPENAI_API_KEY")
     from openai import OpenAI
 
     kwargs = {"api_key": api_key}
@@ -162,7 +162,7 @@ def gemini_generate(
     timeout: float,
 ) -> str:
     if not gemini_api_key:
-        raise RuntimeError("missing Gemini API key: set --gemini-api-key or BENCHMARK_GEMINI_API_KEY or GEMINI_API_KEY")
+        raise RuntimeError("missing Gemini API key: set --gemini-api-key or GEMINI_API_KEY")
     endpoint = gemini_endpoint.rstrip("/")
     url = f"{endpoint}/models/{model}:generateContent"
     payload = _to_gemini_payload(messages, temperature)
@@ -279,7 +279,7 @@ def main() -> int:
         openai_client = get_openai_client(args.api_key, args.base_url)
     if any(x.provider == "gemini" for x in model_specs) and not args.gemini_api_key:
         raise RuntimeError(
-            "missing Gemini API key: set --gemini-api-key or BENCHMARK_GEMINI_API_KEY or GEMINI_API_KEY"
+            "missing Gemini API key: set --gemini-api-key or GEMINI_API_KEY"
         )
 
     names = [x.display_name for x in model_specs]
