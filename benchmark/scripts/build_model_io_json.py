@@ -13,23 +13,23 @@ TASK_GROUPS = {
         "task1_interval_identification",
         "task2_chord_identification",
         "task3_harmonic_function",
-        "task4_transposition",
-        "task5_melodic_inversion",
-        "task6_retrograde",
-        "task7_rhythm_scale",
-        "task8_voice_leading",
+        "task5_transposition",
+        "task6_melodic_inversion",
+        "task7_retrograde",
+        "task8_rhythm_scale",
+        "task4_voice_leading",
     },
     "label": {
         "task1_interval_identification",
         "task2_chord_identification",
         "task3_harmonic_function",
-        "task8_voice_leading",
+        "task4_voice_leading",
     },
     "sequence": {
-        "task4_transposition",
-        "task5_melodic_inversion",
-        "task6_retrograde",
-        "task7_rhythm_scale",
+        "task5_transposition",
+        "task6_melodic_inversion",
+        "task7_retrograde",
+        "task8_rhythm_scale",
     },
 }
 
@@ -37,14 +37,14 @@ LABEL_TASKS = {
     "task1_interval_identification",
     "task2_chord_identification",
     "task3_harmonic_function",
-    "task8_voice_leading",
+    "task4_voice_leading",
 }
 
 SEQUENCE_TASKS = {
-    "task4_transposition",
-    "task5_melodic_inversion",
-    "task6_retrograde",
-    "task7_rhythm_scale",
+    "task5_transposition",
+    "task6_melodic_inversion",
+    "task7_retrograde",
+    "task8_rhythm_scale",
 }
 
 

@@ -44,14 +44,14 @@ LABEL_TASKS=(
   "task1_interval_identification"
   "task2_chord_identification"
   "task3_harmonic_function"
-  "task8_voice_leading"
+  "task4_voice_leading"
 )
 
 SEQUENCE_TASKS=(
-  "task4_transposition"
-  "task5_melodic_inversion"
-  "task6_retrograde"
-  "task7_rhythm_scale"
+  "task5_transposition"
+  "task6_melodic_inversion"
+  "task7_retrograde"
+  "task8_rhythm_scale"
 )
 
 # ========= editable suite settings =========
@@ -74,7 +74,7 @@ OUT_DIR_TEMPLATE="benchmark/results/suite_{ts}"
 # Runtime knobs (shared by ollama + api runners).
 # 最大测试用例数上限：控制基准套件本次最多执行多少个 case（这里设为 20）。
 # 可用于缩短测试时间、限制资源消耗；当可用 case 多于该值时，只会运行前 MAX_CASES 个。
-MAX_CASES=20
+MAX_CASES=0
 TIMEOUT_SEC=120
 TEMP=0
 SLEEP_SEC=0

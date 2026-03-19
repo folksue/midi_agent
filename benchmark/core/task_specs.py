@@ -6,25 +6,25 @@ ALL_TASKS = [
     "task1_interval_identification",
     "task2_chord_identification",
     "task3_harmonic_function",
-    "task4_transposition",
-    "task5_melodic_inversion",
-    "task6_retrograde",
-    "task7_rhythm_scale",
-    "task8_voice_leading",
+    "task4_voice_leading",
+    "task5_transposition",
+    "task6_melodic_inversion",
+    "task7_retrograde",
+    "task8_rhythm_scale",
 ]
 
 LABEL_TASKS = {
     "task1_interval_identification",
     "task2_chord_identification",
     "task3_harmonic_function",
-    "task8_voice_leading",
+    "task4_voice_leading",
 }
 
 SEQUENCE_TASKS = {
-    "task4_transposition",
-    "task5_melodic_inversion",
-    "task6_retrograde",
-    "task7_rhythm_scale",
+    "task5_transposition",
+    "task6_melodic_inversion",
+    "task7_retrograde",
+    "task8_rhythm_scale",
 }
 
 TASK_GROUPS = {
@@ -37,11 +37,11 @@ TASK_TITLES = {
     "task1_interval_identification": "Interval Identification",
     "task2_chord_identification": "Chord Identification",
     "task3_harmonic_function": "Harmonic Function",
-    "task4_transposition": "Transposition",
-    "task5_melodic_inversion": "Melodic Inversion",
-    "task6_retrograde": "Retrograde",
-    "task7_rhythm_scale": "Rhythm Scale",
-    "task8_voice_leading": "Voice Leading Detection",
+    "task4_voice_leading": "Voice Leading Detection",
+    "task5_transposition": "Transposition",
+    "task6_melodic_inversion": "Melodic Inversion",
+    "task7_retrograde": "Retrograde",
+    "task8_rhythm_scale": "Rhythm Scale",
 }
 
 TASK_PREDICTION_KIND = {
@@ -67,7 +67,7 @@ TASK_LABEL_SPACES = {
     "task1_interval_identification": [INTERVAL_LABELS[i] for i in sorted(INTERVAL_LABELS)],
     "task2_chord_identification": _task2_label_space(),
     "task3_harmonic_function": ["tonic", "predominant", "dominant"],
-    "task8_voice_leading": ["parallel_fifths", "voice_crossing", "none"],
+    "task4_voice_leading": ["parallel_fifths", "voice_crossing", "none"],
 }
 
 

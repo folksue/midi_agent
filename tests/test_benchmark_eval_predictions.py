@@ -36,9 +36,9 @@ class TestBenchmarkEvalPredictions(unittest.TestCase):
                 },
                 {
                     "id": "task4-1",
-                    "task": "task4_transposition",
-                    "ground_truth": "t=0 d=1 notes=[62] v=80 | t=1 d=1 notes=[64] v=80",
-                    "target": "t=0 d=1 notes=[62] v=80 | t=1 d=1 notes=[64] v=80",
+                    "task": "task5_transposition",
+                    "ground_truth": "t=0 d=1 notes=[D4] v=80 | t=1 d=1 notes=[E4] v=80",
+                    "target": "t=0 d=1 notes=[D4] v=80 | t=1 d=1 notes=[E4] v=80",
                     "payload": {
                         "melody": [
                             {"t": 0.0, "p": 60, "d": 1.0, "v": 80},
@@ -57,7 +57,7 @@ class TestBenchmarkEvalPredictions(unittest.TestCase):
                 {"id": "task3-2", "prediction_label": "dominant", "prediction": "dominant"},
                 {
                     "id": "task4-1",
-                    "prediction_notes": "t=0 d=1 notes=[62] v=80 | t=1 d=1 notes=[64] v=80",
+                    "prediction_notes": "t=0 d=1 notes=[D4] v=80 | t=1 d=1 notes=[E4] v=80",
                     "prediction_structured": [
                         {"t": 0.0, "p": 62, "d": 1.0, "v": 80},
                         {"t": 1.0, "p": 64, "d": 1.0, "v": 80},
@@ -91,7 +91,7 @@ class TestBenchmarkEvalPredictions(unittest.TestCase):
             self.assertAlmostEqual(result["overall"]["accuracy"], 2 / 3)
             self.assertAlmostEqual(result["by_task"]["task3_harmonic_function"]["accuracy"], 0.5)
             self.assertIn("macro_f1", result["by_task"]["task3_harmonic_function"])
-            self.assertAlmostEqual(result["by_task"]["task4_transposition"]["exact_match"], 1.0)
+            self.assertAlmostEqual(result["by_task"]["task5_transposition"]["exact_match"], 1.0)
 
 
 if __name__ == "__main__":

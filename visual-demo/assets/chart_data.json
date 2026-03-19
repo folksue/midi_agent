@@ -7,7 +7,7 @@
       "source": "webui/oracle",
       "accuracy": 1.0,
       "cases": 16,
-      "updated_at": "2026-03-19 03:14:45"
+      "updated_at": "2026-03-19 03:43:14"
     },
     {
       "label": "oracle · midilike",
@@ -16,7 +16,7 @@
       "source": "webui/oracle",
       "accuracy": 1.0,
       "cases": 16,
-      "updated_at": "2026-03-19 03:14:44"
+      "updated_at": "2026-03-19 03:43:13"
     },
     {
       "label": "oracle · note_level",
@@ -25,7 +25,7 @@
       "source": "webui/oracle",
       "accuracy": 1.0,
       "cases": 16,
-      "updated_at": "2026-03-19 03:14:44"
+      "updated_at": "2026-03-19 03:43:13"
     }
   ],
   "task_average": [
@@ -48,32 +48,32 @@
       "run_count": 3
     },
     {
-      "task": "task4_transposition",
+      "task": "task4_voice_leading",
+      "label": "voice leading",
+      "accuracy": 1.0,
+      "run_count": 3
+    },
+    {
+      "task": "task5_transposition",
       "label": "transposition",
       "accuracy": 1.0,
       "run_count": 3
     },
     {
-      "task": "task5_melodic_inversion",
+      "task": "task6_melodic_inversion",
       "label": "melodic inversion",
       "accuracy": 1.0,
       "run_count": 3
     },
     {
-      "task": "task6_retrograde",
+      "task": "task7_retrograde",
       "label": "retrograde",
       "accuracy": 1.0,
       "run_count": 3
     },
     {
-      "task": "task7_rhythm_scale",
+      "task": "task8_rhythm_scale",
       "label": "rhythm scale",
-      "accuracy": 1.0,
-      "run_count": 3
-    },
-    {
-      "task": "task8_voice_leading",
-      "label": "voice leading",
       "accuracy": 1.0,
       "run_count": 3
     }
@@ -83,11 +83,11 @@
       "interval identification",
       "chord identification",
       "harmonic function",
+      "voice leading",
       "transposition",
       "melodic inversion",
       "retrograde",
-      "rhythm scale",
-      "voice leading"
+      "rhythm scale"
     ],
     "datasets": [
       {
@@ -165,11 +165,11 @@
       "interval identification",
       "chord identification",
       "harmonic function",
+      "voice leading",
       "transposition",
       "melodic inversion",
       "retrograde",
-      "rhythm scale",
-      "voice leading"
+      "rhythm scale"
     ],
     "values": [
       [

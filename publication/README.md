@@ -52,5 +52,7 @@ The current bibliography is intentionally small and focused:
   - covers pretrained symbolic music understanding
 - `liang2023holistic`
   - supports the benchmark-design and multi-metric evaluation framing
+- `zhou2024llmsmusicreason`
+  - provides a broader recent point of comparison on language-model evaluation for music understanding and generation
 
 Before a real submission, add more references on symbolic music reasoning, theory-aware evaluation, and computational musicology where appropriate.

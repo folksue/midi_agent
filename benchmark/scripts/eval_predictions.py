@@ -197,7 +197,7 @@ def _finalize_task(task: str, stats: dict) -> dict:
         observed.update(x for x in stats["pred_labels"] if x != MISSING_LABEL)
         if not labels:
             labels = sorted(observed)
-        if task in {"task3_harmonic_function", "task8_voice_leading"}:
+        if task in {"task3_harmonic_function", "task4_voice_leading"}:
             out["macro_f1"] = _macro_f1(stats["ref_labels"], stats["pred_labels"], labels)
         out["label_space"] = labels
         return out
@@ -210,10 +210,10 @@ def _finalize_task(task: str, stats: dict) -> dict:
             "decode_error_count": stats["decode_error_count"],
         }
     )
-    if task == "task4_transposition":
+    if task == "task5_transposition":
         out["interval_preservation_rate"] = stats["interval_preserve_sum"] / n
         out["rhythm_preservation_rate"] = stats["rhythm_preserve_sum"] / n
-    if task == "task7_rhythm_scale":
+    if task == "task8_rhythm_scale":
         out["bar_validity_rate"] = stats["bar_valid_sum"] / n
     return out
 
@@ -286,10 +286,10 @@ def main() -> int:
         task_stats["timing_acc_sum"] += _timing_accuracy(pred_notes, ref_notes)
 
         src_notes = gold_row.get("payload", {}).get("melody", [])
-        if task == "task4_transposition":
+        if task == "task5_transposition":
             task_stats["interval_preserve_sum"] += _interval_preservation_rate(pred_notes, src_notes)
             task_stats["rhythm_preserve_sum"] += _rhythm_preservation_rate(pred_notes, src_notes)
-        if task == "task7_rhythm_scale":
+        if task == "task8_rhythm_scale":
             task_stats["bar_valid_sum"] += float(_bar_valid(pred_notes))
 
         tok_stats["hit"] += hit

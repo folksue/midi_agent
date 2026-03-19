@@ -9,12 +9,12 @@ LABEL_TASKS = {
     "task1_interval_identification",
     "task2_chord_identification",
     "task3_harmonic_function",
-    "task8_voice_leading",
+    "task4_voice_leading",
 }
 
 
 def parse_args() -> argparse.Namespace:
-    p = argparse.ArgumentParser(description="Evaluate Label Classification tasks (Task 1/2/3/8).")
+    p = argparse.ArgumentParser(description="Evaluate Label Classification tasks (Task 1/2/3/4).")
     p.add_argument("--gold", required=True, help="Benchmark jsonl view file (note_level/midilike/remilike).")
     p.add_argument("--pred", required=True, help="Prediction jsonl. Each line: {id|case_id, prediction|output|pred|answer}.")
     p.add_argument("--out", default="benchmark/results/label_eval.json")

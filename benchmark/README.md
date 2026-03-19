@@ -8,12 +8,12 @@ Current benchmark supports:
   - `task1_interval_identification`
   - `task2_chord_identification`
   - `task3_harmonic_function`
-  - `task8_voice_leading`
+  - `task4_voice_leading`
 - Sequence transformation tasks:
-- `task4_transposition`
-- `task5_melodic_inversion`
-- `task6_retrograde`
-- `task7_rhythm_scale`
+- `task5_transposition`
+- `task6_melodic_inversion`
+- `task7_retrograde`
+- `task8_rhythm_scale`
 
 No train/dev/test split is used.
 
@@ -30,10 +30,10 @@ No train/dev/test split is used.
 - `benchmark/data/model_io/<tokenizer>/label_cases.json`
 - `benchmark/data/model_io/<tokenizer>/sequence_cases.json`
 - By-task split files are also supported (one file per task):
-  - `benchmark/data/model_io/<tokenizer>/by_task/task4_transposition.json`
-  - `benchmark/data/model_io/<tokenizer>/by_task/task5_melodic_inversion.json`
-  - `benchmark/data/model_io/<tokenizer>/by_task/task6_retrograde.json`
-  - `benchmark/data/model_io/<tokenizer>/by_task/task7_rhythm_scale.json`
+  - `benchmark/data/model_io/<tokenizer>/by_task/task5_transposition.json`
+  - `benchmark/data/model_io/<tokenizer>/by_task/task6_melodic_inversion.json`
+  - `benchmark/data/model_io/<tokenizer>/by_task/task7_retrograde.json`
+  - `benchmark/data/model_io/<tokenizer>/by_task/task8_rhythm_scale.json`
 
 ## Prompt Composition Rules
 Prompt fields are generated in `benchmark/core/render.py` and exported by `benchmark/scripts/gen_zero_shot.py` + `benchmark/scripts/export_views.py`.
@@ -58,7 +58,7 @@ Each case stores full model input as:
   - control params (`source_key/target_key/pivot/factor`)
   - `melody=...`
 
-## Prompt Example (agent_like, note_level, Task4)
+## Prompt Example (agent_like, note_level, Task5)
 
 ### System prompt
 ```text
@@ -66,8 +66,8 @@ You are a strict music token transformation generator.
 Rules:
 1) Output ONLY the transformed melody tokens.
 2) No explanations, no markdown, no extra text.
-3) Output melody tokens with grammar: n<PITCH>/<DURATION> separated by single spaces.
-Example: t=0.00 d=0.50 notes=[60] v=80 | t=0.50 d=0.50 notes=[62] v=80
+3) Output melody tokens as note_level event blocks.
+Example: t=0.00 d=0.50 notes=[C4] v=80 | t=0.50 d=0.50 notes=[D4] v=80
 Use decimal numbers only (NOT fraction like 1/4).
 4) Transform pitch by key shift; keep note count/order/durations unchanged.
 5) If unsure, output fewer valid tokens over invalid format.
@@ -78,7 +78,7 @@ Use decimal numbers only (NOT fraction like 1/4).
 Transposition
 bpm=120 meter=4/4 grid=1/16 bar_beats=4.0
 source_key=C_major target_key=G_major
-melody=t=0 d=0.5 notes=[62] v=80 | t=0.5 d=0.25 notes=[70] v=80 | ...
+melody=t=0 d=0.5 notes=[D4] v=80 | t=0.5 d=0.25 notes=[A#4] v=80 | ...
 ```
 
 ## How To Regenerate
