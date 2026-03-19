@@ -4,7 +4,7 @@ This folder contains the paper-oriented material for the project, centered on a 
 
 Included files:
 
-- `main.tex`: prefilled draft focused on the symbolic benchmark project
+- `symbolicMusicBenchmarkForMusicTheoryReasoningAndComputationalMusicology.tex`: prefilled draft focused on the symbolic benchmark project
 - `references.bib`: starter bibliography for the current draft
 - `ismir.sty`, `IEEEtran.bst`, `cite.sty`: official template files
 - `figures/`: local copies of benchmark diagrams used in the draft
@@ -27,10 +27,10 @@ If you prefer a traditional LaTeX flow:
 
 ```bash
 cd publication
-pdflatex main.tex
-bibtex main
-pdflatex main.tex
-pdflatex main.tex
+pdflatex symbolicMusicBenchmarkForMusicTheoryReasoningAndComputationalMusicology.tex
+bibtex symbolicMusicBenchmarkForMusicTheoryReasoningAndComputationalMusicology
+pdflatex symbolicMusicBenchmarkForMusicTheoryReasoningAndComputationalMusicology.tex
+pdflatex symbolicMusicBenchmarkForMusicTheoryReasoningAndComputationalMusicology.tex
 ```
 
 ## Notes

@@ -3,20 +3,13 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+PAPER_BASENAME="symbolicMusicBenchmarkForMusicTheoryReasoningAndComputationalMusicology"
+PAPER_TEX="${PAPER_BASENAME}.tex"
+PAPER_PDF="${PAPER_BASENAME}.pdf"
 
 cd "${SCRIPT_DIR}"
-tectonic main.tex
+tectonic "${PAPER_TEX}"
 
-TITLE="$(python3 - <<'PY'
-from pathlib import Path
-import re
-text = Path("main.tex").read_text(encoding="utf-8")
-m = re.search(r"\\title\{([^}]*)\}", text)
-title = m.group(1).strip() if m else "paper"
-print(title)
-PY
-)"
-
-OUTPUT_PATH="${REPO_ROOT}/${TITLE}.pdf"
-cp main.pdf "${OUTPUT_PATH}"
+OUTPUT_PATH="${REPO_ROOT}/${PAPER_PDF}"
+cp "${PAPER_PDF}" "${OUTPUT_PATH}"
 echo "Paper PDF written to ${OUTPUT_PATH}"
