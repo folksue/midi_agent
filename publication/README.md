@@ -1,6 +1,6 @@
-# Publication Folder
+# Publication
 
-This folder contains a draft paper package based on the official ISMIR 2026 LaTeX template.
+This folder contains the paper-oriented material for the project, centered on a draft package based on the official ISMIR 2026 LaTeX template.
 
 Included files:
 
@@ -9,6 +9,8 @@ Included files:
 - `ismir.sty`, `IEEEtran.bst`, `cite.sty`: official template files
 - `figures/`: local copies of benchmark diagrams used in the draft
 - `reviewer-checklist.md`: review-facing checklist based on the criteria currently guiding the paper
+- `ASMCM-scientific-paper-template.docx`: Word template aligned with the same paper direction
+- `scripts/generate_asmcm_scientific_paper_template.py`: generator for the paper template DOCX
 
 ## Compile locally
 
@@ -16,8 +18,10 @@ With `tectonic`:
 
 ```bash
 cd publication
-tectonic main.tex
+./build.sh
 ```
+
+This compiles the local draft and copies a title-named PDF to the repository root.
 
 If you prefer a traditional LaTeX flow:
 

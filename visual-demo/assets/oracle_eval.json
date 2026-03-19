@@ -1,6 +1,6 @@
 {
-  "gold": "/Users/meco/MBP Files/Gits/upf/ASMCM/midi_agent/benchmark/data/views/note_level/zero_shot.jsonl",
-  "pred": "/Users/meco/MBP Files/Gits/upf/ASMCM/midi_agent/benchmark/results/webui/oracle/note_level/predictions.jsonl",
+  "gold": "/Users/meco/MBP Files/Gits/upf/ASMCM/midi_agent/benchmark/data/views/remilike/zero_shot.jsonl",
+  "pred": "/Users/meco/MBP Files/Gits/upf/ASMCM/midi_agent/benchmark/results/webui/oracle/remilike/predictions.jsonl",
   "overall": {
     "cases": 16,
     "missing": 0,
@@ -102,7 +102,7 @@
       "missing": 0,
       "accuracy": 1.0,
       "exact_match": 1.0,
-      "macro_f1": 0.3333333333333333,
+      "macro_f1": 0.6666666666666666,
       "label_space": [
         "tonic",
         "predominant",
@@ -166,7 +166,7 @@
     }
   },
   "by_tokenizer": {
-    "note_level": {
+    "remilike": {
       "cases": 16,
       "missing": 0,
       "hit": 16,

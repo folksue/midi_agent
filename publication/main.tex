@@ -98,7 +98,7 @@ These simplifications are methodological rather than theoretical claims about mu
 
 The benchmark is implemented as a rule-based pipeline. A generator produces canonical cases at the raw symbolic level. These are then exported to tokenizer-specific views and converted into model-ready JSON cases. Model predictions are evaluated by a unified script that aggregates overall accuracy, task-level summaries, and tokenizer-level summaries. Additional annotation scripts attach model outputs back to the original cases and record whether the prediction exactly matches the reference target. The main output products are therefore not just a single score, but a compact set of artifacts that support both quantitative comparison and qualitative inspection.
 
-The repository includes both a command-line workflow and a lightweight browser-based interface for local experimentation. The local web UI can generate benchmark data, run an oracle demo from ground truth, and evaluate user-provided prediction files. A static GitHub Pages dashboard can publish benchmark snapshots and oracle-demo outputs for public inspection, though live execution still requires a local or hosted backend.
+The repository includes both a command-line workflow and a lightweight browser-based interface for local experimentation. The local web UI can generate benchmark data, run an oracle demo from ground truth, and evaluate user-provided prediction files. A static GitHub Pages visual demo can publish benchmark snapshots and oracle-demo outputs for public inspection, though live execution still requires a local or hosted backend.
 
 \section{Evaluation Protocol}
 \label{sec:evaluation}

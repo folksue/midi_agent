@@ -10,8 +10,9 @@ from docx.oxml.ns import qn
 from docx.shared import Inches, Pt
 
 
-MD_OUT = Path("output/presentation/ASMCM-presentation-speaker-notes.md")
-DOCX_OUT = Path("output/docx/ASMCM-presentation-speaker-notes.docx")
+SUPPORTING_DOCS_DIR = Path(__file__).resolve().parents[1]
+MD_OUT = SUPPORTING_DOCS_DIR / "notes" / "ASMCM-presentation-speaker-notes.md"
+DOCX_OUT = SUPPORTING_DOCS_DIR / "docx" / "ASMCM-presentation-speaker-notes.docx"
 
 
 SECTIONS = [

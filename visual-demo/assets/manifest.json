@@ -1,6 +1,8 @@
 {
-  "site_name": "Symbolic Music Benchmark Pages",
+  "site_name": "Symbolic Music Benchmark Visual Demo",
+  "site_kind": "visual-demo",
   "generated_from_branch": "project-dev4paper",
+  "run_count": 3,
   "copied_assets": {
     "oracle_eval": true,
     "oracle_overall": true,

@@ -10,7 +10,8 @@ from docx.oxml.ns import qn
 from docx.shared import Inches, Pt
 
 
-OUT_PATH = Path("output/docx/ASMCM-scientific-paper-template.docx")
+PUBLICATION_DIR = Path(__file__).resolve().parents[1]
+OUT_PATH = PUBLICATION_DIR / "ASMCM-scientific-paper-template.docx"
 
 
 def set_page_layout(document: Document) -> None:

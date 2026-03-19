@@ -1,4 +1,4 @@
-name: benchmark-pages
+name: visual-demo-pages
 
 on:
   workflow_dispatch:
@@ -7,11 +7,11 @@ on:
       - project-dev4paper
     paths:
       - "benchmark/**"
-      - "docs/benchmark-site/**"
+      - "visual-demo/**"
       - "benchmark_web.py"
-      - "scripts/build_benchmark_pages_site.py"
+      - "scripts/build_visual_demo_site.py"
       - "requirements.txt"
-      - ".github/workflows/benchmark-pages.yml"
+      - ".github/workflows/visual-demo-pages.yml"
 
 permissions:
   contents: read
@@ -19,7 +19,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: benchmark-pages
+  group: visual-demo-pages
   cancel-in-progress: true
 
 jobs:
@@ -42,7 +42,7 @@ jobs:
       - name: Generate benchmark snapshot
         run: |
           python benchmark_web.py --smoke-test
-          python scripts/build_benchmark_pages_site.py
+          python scripts/build_visual_demo_site.py
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
@@ -50,7 +50,7 @@ jobs:
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: docs/benchmark-site
+          path: visual-demo
 
   deploy:
     environment:

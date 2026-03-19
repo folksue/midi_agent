@@ -306,7 +306,7 @@ def build_document(output_path: Path) -> None:
 
 
 def main() -> int:
-    out = Path("output/docx/ASMCM-deliverables-template.docx")
+    out = SUPPORTING_DOCS_DIR / "docx" / "ASMCM-deliverables-template.docx"
     build_document(out)
     print(f"wrote: {out}")
     return 0
@@ -314,3 +314,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+SUPPORTING_DOCS_DIR = Path(__file__).resolve().parents[1]

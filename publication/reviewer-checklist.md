@@ -68,4 +68,4 @@ Use this file to sanity-check the paper against the review form you shared.
 - Novelty:
   - Emphasize task operationalization, unified evaluation, and the correctness-vs-explanation distinction.
 - Reproducibility:
-  - Point reviewers to the scripts, canonical prediction schema, local web UI, and Pages dashboard.
+  - Point reviewers to the scripts, canonical prediction schema, local web UI, and GitHub Pages visual demo.

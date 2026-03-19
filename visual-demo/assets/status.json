@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-18 16:46:34",
+  "generated_at": "2026-03-19 03:15:11",
   "outputs": {
     "raw": {
       "exists": true,
@@ -45,39 +45,39 @@
     {
       "case_id": "task1_interval_identification-000000",
       "task": "task1_interval_identification",
-      "input_preview": "Interval Identification notes=[58,61]",
+      "input_preview": "",
       "ground_truth": "minor_third"
     },
     {
       "case_id": "task1_interval_identification-000001",
       "task": "task1_interval_identification",
-      "input_preview": "Interval Identification notes=[60,72]",
+      "input_preview": "",
       "ground_truth": "octave"
     },
     {
       "case_id": "task2_chord_identification-000002",
       "task": "task2_chord_identification",
-      "input_preview": "Chord Identification notes=[61,65,68]",
+      "input_preview": "",
       "ground_truth": "C#_major"
     },
     {
       "case_id": "task2_chord_identification-000003",
       "task": "task2_chord_identification",
-      "input_preview": "Chord Identification notes=[61,65,68,71]",
+      "input_preview": "",
       "ground_truth": "C#7"
     },
     {
       "case_id": "task3_harmonic_function-000004",
       "task": "task3_harmonic_function",
-      "input_preview": "Harmonic Function key=E_major chord=B_major",
-      "ground_truth": "dominant"
+      "input_preview": "",
+      "ground_truth": "tonic"
     }
   ],
   "runs": {
     "oracle": {
       "available": true,
-      "tokenizer": "note_level",
-      "path": "/Users/meco/MBP Files/Gits/upf/ASMCM/midi_agent/benchmark/results/webui/oracle/note_level/eval_predictions.json",
+      "tokenizer": "remilike",
+      "path": "/Users/meco/MBP Files/Gits/upf/ASMCM/midi_agent/benchmark/results/webui/oracle/remilike/eval_predictions.json",
       "overall": {
         "cases": 16,
         "missing": 0,
@@ -179,7 +179,7 @@
           "missing": 0,
           "accuracy": 1.0,
           "exact_match": 1.0,
-          "macro_f1": 0.3333333333333333,
+          "macro_f1": 0.6666666666666666,
           "label_space": [
             "tonic",
             "predominant",
@@ -243,7 +243,7 @@
         }
       },
       "latest_accuracy_text": "1.000",
-      "updated_at": "2026-03-18 16:02:48"
+      "updated_at": "2026-03-19 03:14:45"
     },
     "custom": {
       "available": false,

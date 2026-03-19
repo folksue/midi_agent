@@ -60,6 +60,12 @@ The web UI supports three simple workflows:
 - run an oracle demo with perfect reference predictions
 - evaluate an existing prediction file and inspect the resulting summaries
 
+It also supports a full local demo workflow:
+
+- generate benchmark data
+- run oracle predictions for all tokenizers
+- refresh the static `visual-demo/` dashboard assets
+
 This is meant for quick experimentation and teaching demos. The standard benchmark files still live in the same repository paths described below.
 
 ## Standard workflow
@@ -71,6 +77,12 @@ bash scripts/run_standard_benchmark.sh 200 agent_like none
 ```
 
 That prepares the full benchmark and prints the next commands for running a model.
+
+If you want the benchmark plus a refreshed visual dashboard in one step, run:
+
+```bash
+bash scripts/run_visual_demo_workflow.sh 8 agent_like yes
+```
 
 ### 1. Generate benchmark data
 

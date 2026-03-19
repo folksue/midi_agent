@@ -2,13 +2,13 @@
 set -euo pipefail
 
 ENV_DIR="${1:-asmcm-env}"
-DECK_PATH="${2:-docs/presentation/paper-proposal-deck.pptx}"
-OUT_DIR="${3:-docs/presentation/rendered}"
+DECK_PATH="${2:-supporting-docs/presentation/paper-proposal-deck.pptx}"
+OUT_DIR="${3:-supporting-docs/presentation/rendered}"
 SOFFICE_DIR="${SOFFICE_DIR:-/Applications/LibreOffice.app/Contents/MacOS}"
 BREW_BIN="${BREW_BIN:-/opt/homebrew/bin}"
 PY_BIN="${ENV_DIR}/bin/python"
-SLIDES_TEST_SCRIPT="docs/presentation/scripts/slides_test.py"
-DETECT_FONT_SCRIPT="docs/presentation/scripts/detect_font.py"
+SLIDES_TEST_SCRIPT="supporting-docs/presentation/scripts/slides_test.py"
+DETECT_FONT_SCRIPT="supporting-docs/presentation/scripts/detect_font.py"
 
 mkdir -p "${OUT_DIR}"
 
