@@ -109,7 +109,19 @@
         "dominant"
       ]
     },
-    "task4_transposition": {
+    "task4_voice_leading": {
+      "n": 2,
+      "missing": 0,
+      "accuracy": 1.0,
+      "exact_match": 1.0,
+      "macro_f1": 0.3333333333333333,
+      "label_space": [
+        "parallel_fifths",
+        "voice_crossing",
+        "none"
+      ]
+    },
+    "task5_transposition": {
       "n": 2,
       "missing": 0,
       "accuracy": 1.0,
@@ -121,7 +133,7 @@
       "interval_preservation_rate": 1.0,
       "rhythm_preservation_rate": 1.0
     },
-    "task5_melodic_inversion": {
+    "task6_melodic_inversion": {
       "n": 2,
       "missing": 0,
       "accuracy": 1.0,
@@ -131,7 +143,7 @@
       "timing_accuracy": 1.0,
       "decode_error_count": 0
     },
-    "task6_retrograde": {
+    "task7_retrograde": {
       "n": 2,
       "missing": 0,
       "accuracy": 1.0,
@@ -141,7 +153,7 @@
       "timing_accuracy": 1.0,
       "decode_error_count": 0
     },
-    "task7_rhythm_scale": {
+    "task8_rhythm_scale": {
       "n": 2,
       "missing": 0,
       "accuracy": 1.0,
@@ -151,18 +163,6 @@
       "timing_accuracy": 1.0,
       "decode_error_count": 0,
       "bar_validity_rate": 1.0
-    },
-    "task8_voice_leading": {
-      "n": 2,
-      "missing": 0,
-      "accuracy": 1.0,
-      "exact_match": 1.0,
-      "macro_f1": 0.6666666666666666,
-      "label_space": [
-        "parallel_fifths",
-        "voice_crossing",
-        "none"
-      ]
     }
   },
   "by_tokenizer": {
