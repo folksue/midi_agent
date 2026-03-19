@@ -5,6 +5,7 @@
 \usepackage{amsmath,cite,url}
 \usepackage{graphicx}
 \usepackage{booktabs}
+\usepackage{array}
 \usepackage{color}
 
 \title{A Symbolic Music Benchmark for Music Theory Reasoning and Computational Musicology}
@@ -139,7 +140,10 @@ We use deterministic line ordering so prompts are stable across runs and directl
   \centering
   \caption{Task groups, outputs, and primary checks in the released benchmark.}
   \label{tab:tasks}
-  \begin{tabular}{p{0.30\columnwidth}p{0.22\columnwidth}p{0.32\columnwidth}}
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \renewcommand{\arraystretch}{1.08}
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.24\columnwidth}>{\raggedright\arraybackslash}p{0.31\columnwidth}>{\raggedright\arraybackslash}p{0.31\columnwidth}@{}}
     \toprule
     Task group & Output field & Primary checks \\
     \midrule
