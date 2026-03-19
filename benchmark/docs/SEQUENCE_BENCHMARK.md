@@ -1,11 +1,11 @@
-# Note Sequence Transformation Benchmark (Task 4-7)
+# Note Sequence Transformation Benchmark (Task 5-8)
 
 ## Scope
 Only these 4 tasks:
-- `task4_transposition`
-- `task5_melodic_inversion`
-- `task6_retrograde`
-- `task7_rhythm_scale`
+- `task5_transposition`
+- `task6_melodic_inversion`
+- `task7_retrograde`
+- `task8_rhythm_scale`
 
 No train/dev/test split. This is for zero-shot evaluation.
 
@@ -39,7 +39,7 @@ The sequence payload is agent-aligned event format (`t,d,p,v`) and includes:
 ## 3) Run model and save predictions
 Prediction file format (jsonl):
 ```json
-{"id": "task4_transposition-000001", "prediction": "..."}
+{"id": "task5_transposition-000001", "prediction": "..."}
 ```
 
 ## 4) Evaluate (sequence-only metrics)
@@ -51,12 +51,12 @@ python -m benchmark.scripts.eval_sequence_predictions \
 ```
 
 ## Metrics
-- Common (Task 4-7):
+- Common (Task 5-8):
   - `exact_match`
   - `pitch_accuracy`
   - `duration_accuracy`
-- Task 4 extra:
+- Task 5 extra:
   - `interval_preservation_rate`
   - `rhythm_preservation_rate`
-- Task 7 extra:
+- Task 8 extra:
   - `bar_validity_rate`

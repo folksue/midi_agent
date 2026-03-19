@@ -6,14 +6,14 @@ LABEL_TASKS = {
     "task1_interval_identification",
     "task2_chord_identification",
     "task3_harmonic_function",
-    "task8_voice_leading",
+    "task4_voice_leading",
 }
 
 SEQUENCE_TASKS = {
-    "task4_transposition",
-    "task5_melodic_inversion",
-    "task6_retrograde",
-    "task7_rhythm_scale",
+    "task5_transposition",
+    "task6_melodic_inversion",
+    "task7_retrograde",
+    "task8_rhythm_scale",
 }
 
 
@@ -26,15 +26,15 @@ def render_target(task: str, target_payload: object, tokenizer: str) -> str:
         "task1_interval_identification",
         "task2_chord_identification",
         "task3_harmonic_function",
-        "task8_voice_leading",
+        "task4_voice_leading",
     }:
         return str(target_payload)
 
     if task in {
-        "task4_transposition",
-        "task5_melodic_inversion",
-        "task6_retrograde",
-        "task7_rhythm_scale",
+        "task5_transposition",
+        "task6_melodic_inversion",
+        "task7_retrograde",
+        "task8_rhythm_scale",
     }:
         return render_by_tokenizer(tokenizer, target_payload)
 
@@ -42,13 +42,13 @@ def render_target(task: str, target_payload: object, tokenizer: str) -> str:
 
 
 def _sequence_task_rules(task: str) -> str:
-    if task == "task4_transposition":
+    if task == "task5_transposition":
         return "Transform pitch by key shift; keep note count/order/durations unchanged."
-    if task == "task5_melodic_inversion":
+    if task == "task6_melodic_inversion":
         return "Use inversion formula p' = 2*pivot - p; keep note count/order/durations unchanged."
-    if task == "task6_retrograde":
+    if task == "task7_retrograde":
         return "Reverse note order; each note keeps its own pitch-duration pair."
-    if task == "task7_rhythm_scale":
+    if task == "task8_rhythm_scale":
         return "Scale every duration by factor; keep note count/order/pitches unchanged."
     return ""
 
@@ -57,8 +57,8 @@ def _tokenizer_grammar(tokenizer: str) -> str:
     if tokenizer == "note_level":
         return (
             "Output melody as event blocks separated by ' | '.\n"
-            "Each event must be exactly: t=<DECIMAL> d=<DECIMAL> notes=[<INT>] v=<INT>\n"
-            "Example: t=0.00 d=0.50 notes=[60] v=80 | t=0.50 d=0.50 notes=[62] v=80\n"
+            "Each event must be exactly: t=<DECIMAL> d=<DECIMAL> notes=[<NOTE_NAME>] v=<INT>\n"
+            "Example: t=0.00 d=0.50 notes=[C4] v=80 | t=0.50 d=0.50 notes=[D4] v=80\n"
             "Use decimal numbers only (NOT fractions like 1/4)."
         )
     if tokenizer == "midilike":
@@ -78,7 +78,7 @@ def _tokenizer_grammar(tokenizer: str) -> str:
 
 def _label_input_tokenizer_hint(tokenizer: str) -> str:
     if tokenizer == "note_level":
-        return "Input notes are serialized as note_level events: t=<DECIMAL> d=<DECIMAL> notes=[<INT>] v=<INT>."
+        return "Input notes are serialized as note_level events: t=<DECIMAL> d=<DECIMAL> notes=[<NOTE_NAME>] v=<INT>."
     if tokenizer == "midilike":
         return (
             "Input notes are serialized as midilike tokens: "
@@ -110,7 +110,7 @@ def _label_task_rules(task: str) -> str:
             "Classify the chord's harmonic function in C major context.\n"
             "Output exactly one label from: tonic, predominant, dominant."
         )
-    if task == "task8_voice_leading":
+    if task == "task4_voice_leading":
         return (
             "Detect voice-leading violation type between t0 and t1 voice states.\n"
             "Output exactly one label from: parallel_fifths, voice_crossing, none."
@@ -120,10 +120,10 @@ def _label_task_rules(task: str) -> str:
 
 def render_system_prompt(task: str, tokenizer: str, prompt_mode: str = "light") -> str:
     if prompt_mode == "agent_like" and task in {
-        "task4_transposition",
-        "task5_melodic_inversion",
-        "task6_retrograde",
-        "task7_rhythm_scale",
+        "task5_transposition",
+        "task6_melodic_inversion",
+        "task7_retrograde",
+        "task8_rhythm_scale",
     }:
         return (
             "You are a strict music token transformation generator.\n"
@@ -135,17 +135,17 @@ def render_system_prompt(task: str, tokenizer: str, prompt_mode: str = "light") 
             "5) If unsure, output fewer valid tokens over invalid format."
         )
     if task in {
-        "task4_transposition",
-        "task5_melodic_inversion",
-        "task6_retrograde",
-        "task7_rhythm_scale",
+        "task5_transposition",
+        "task6_melodic_inversion",
+        "task7_retrograde",
+        "task8_rhythm_scale",
     }:
         return "You are a music transformation solver. Return only the transformed melody tokens. No explanation."
     if task in {
         "task1_interval_identification",
         "task2_chord_identification",
         "task3_harmonic_function",
-        "task8_voice_leading",
+        "task4_voice_leading",
     }:
         return (
             "You are a strict music label classifier.\n"
@@ -214,7 +214,7 @@ def render_user_prompt_parts(task: str, payload: dict, tokenizer: str, prompt_mo
         parts["control_params"] = {"key_context": str(payload.get("key", "C_major"))}
         return parts
 
-    if task == "task4_transposition":
+    if task == "task5_transposition":
         melody = render_by_tokenizer(tokenizer, payload["melody"])
         parts["question_body"] = "Transposition"
         parts["task_description"] = "Transpose the melody from source key to target key while preserving rhythm and note order."
@@ -230,7 +230,7 @@ def render_user_prompt_parts(task: str, payload: dict, tokenizer: str, prompt_mo
         parts["melody_input_tokens"] = melody
         return parts
 
-    if task == "task5_melodic_inversion":
+    if task == "task6_melodic_inversion":
         melody = render_by_tokenizer(tokenizer, payload["melody"])
         parts["question_body"] = "Melodic Inversion"
         parts["task_description"] = "Invert each melody pitch around the given pivot while preserving timing/order."
@@ -242,7 +242,7 @@ def render_user_prompt_parts(task: str, payload: dict, tokenizer: str, prompt_mo
         parts["melody_input_tokens"] = melody
         return parts
 
-    if task == "task6_retrograde":
+    if task == "task7_retrograde":
         melody = render_by_tokenizer(tokenizer, payload["melody"])
         parts["question_body"] = "Retrograde"
         parts["task_description"] = "Reverse the melodic note order while keeping each note's pitch-duration identity."
@@ -253,7 +253,7 @@ def render_user_prompt_parts(task: str, payload: dict, tokenizer: str, prompt_mo
         parts["melody_input_tokens"] = melody
         return parts
 
-    if task == "task7_rhythm_scale":
+    if task == "task8_rhythm_scale":
         melody = render_by_tokenizer(tokenizer, payload["melody"])
         parts["question_body"] = "Rhythm Scale"
         parts["task_description"] = "Scale all note durations by the given factor while preserving pitch order."
@@ -265,7 +265,7 @@ def render_user_prompt_parts(task: str, payload: dict, tokenizer: str, prompt_mo
         parts["melody_input_tokens"] = melody
         return parts
 
-    if task == "task8_voice_leading":
+    if task == "task4_voice_leading":
         v0 = render_by_tokenizer(tokenizer, payload["voices_t0"])
         v1 = render_by_tokenizer(tokenizer, payload["voices_t1"])
         parts["question_body"] = "Voice Leading Detection"

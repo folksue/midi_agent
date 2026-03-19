@@ -72,7 +72,7 @@ def label_task_explanation(task: str, payload: dict, target_label: str) -> str:
             reason = "it belongs to the tonic area"
         return f"In {key}, the chord {chord} is labeled {target_label} because {reason}."
 
-    if task == "task8_voice_leading":
+    if task == "task4_voice_leading":
         t0 = payload.get("voices_t0", [])
         t1 = payload.get("voices_t1", [])
         if len(t0) >= 2 and len(t1) >= 2:

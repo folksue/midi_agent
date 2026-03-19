@@ -291,15 +291,15 @@ def gen_one(task: str, rng: random.Random):
         return gen_task2(rng)
     if task == "task3_harmonic_function":
         return gen_task3(rng)
-    if task == "task4_transposition":
+    if task == "task5_transposition":
         return gen_task4(rng)
-    if task == "task5_melodic_inversion":
+    if task == "task6_melodic_inversion":
         return gen_task5(rng)
-    if task == "task6_retrograde":
+    if task == "task7_retrograde":
         return gen_task6(rng)
-    if task == "task7_rhythm_scale":
+    if task == "task8_rhythm_scale":
         return gen_task7(rng)
-    if task == "task8_voice_leading":
+    if task == "task4_voice_leading":
         return gen_task8(rng)
     raise ValueError(task)
 

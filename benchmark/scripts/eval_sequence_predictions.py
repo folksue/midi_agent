@@ -11,7 +11,7 @@ from benchmark.tokenizers import decode_melody_by_tokenizer
 
 
 def parse_args() -> argparse.Namespace:
-    p = argparse.ArgumentParser(description="Evaluate Note Sequence Transformation tasks (Task 4-7).")
+    p = argparse.ArgumentParser(description="Evaluate Note Sequence Transformation tasks (Task 5-8).")
     p.add_argument("--gold", required=True, help="Benchmark jsonl view file (note_level/midilike/remilike).")
     p.add_argument("--pred", required=True, help="Prediction jsonl. Each line: {id, prediction}.")
     p.add_argument("--out", default="benchmark/results/sequence_eval.json")
@@ -157,10 +157,10 @@ def main() -> int:
         rec["timing_acc_sum"] += _timing_accuracy(pred_notes, ref_notes)
 
         src = g["payload"]["melody"]
-        if task == "task4_transposition":
+        if task == "task5_transposition":
             rec["interval_preserve_sum"] += _interval_preservation_rate(pred_notes, src)
             rec["rhythm_preserve_sum"] += _rhythm_preservation_rate(pred_notes, src)
-        if task == "task7_rhythm_scale":
+        if task == "task8_rhythm_scale":
             rec["bar_valid_sum"] += float(_bar_valid(pred_notes))
 
     def finalize(x: dict) -> dict:

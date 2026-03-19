@@ -28,7 +28,7 @@ class TestBenchmarkTaskSpecs(unittest.TestCase):
     def test_known_label_spaces_are_available(self):
         self.assertIn("perfect_fifth", label_space_for_task("task1_interval_identification"))
         self.assertIn("dominant", label_space_for_task("task3_harmonic_function"))
-        self.assertIn("voice_crossing", label_space_for_task("task8_voice_leading"))
+        self.assertIn("voice_crossing", label_space_for_task("task4_voice_leading"))
 
 
 if __name__ == "__main__":
