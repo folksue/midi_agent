@@ -56,18 +56,18 @@ The benchmark defines eight tasks grouped by output type.
 
 \textbf{Label classification:}
 \begin{itemize}
-    \item \texttt{interval\_identification}
-    \item \texttt{chord\_identification}
-    \item \texttt{harmonic\_function}
-    \item \texttt{voice\_leading}
+    \item Task 1: Interval Identification
+    \item Task 2: Chord Identification
+    \item Task 3: Harmonic Function Classification
+    \item Task 4: Voice-Leading Violation Detection
 \end{itemize}
 
 \textbf{Note-sequence transformation:}
 \begin{itemize}
-    \item \texttt{transposition}
-    \item \texttt{melodic\_inversion}
-    \item \texttt{retrograde}
-    \item \texttt{rhythm\_scale}
+    \item Task 5: Transposition
+    \item Task 6: Melodic Inversion
+    \item Task 7: Retrograde
+    \item Task 8: Rhythm Scale
 \end{itemize}
 
 For label tasks, each case has one canonical target label. For sequence tasks, each case has one target event sequence.
@@ -98,16 +98,16 @@ Examples of deterministic operators include semitone transposition, inversion ar
 
 \subsection{Tokenizer Views}
 
-All cases are generated in a canonical event schema with fields \texttt{t} (start time), \texttt{p} (MIDI pitch), \texttt{d} (duration), and \texttt{v} (velocity). The export step then serializes the same payload into three synchronized tokenizer views:
+All cases are generated in a canonical event schema with fields t (start time), p (MIDI pitch), d (duration), and v (velocity). The export step then serializes the same payload into three synchronized tokenizer views:
 \begin{itemize}
-    \item \texttt{note\_level}: event blocks separated by \texttt{|}, e.g., \texttt{t=0.5 d=0.25 notes=[G4] v=80}
+    \item note\_level: event blocks separated by \texttt{|}, e.g., \texttt{t=0.5 d=0.25 notes=[G4] v=80}
     \item \texttt{midilike}: repeating quintuplets, e.g., \texttt{TIME\_0.5 NOTE\_ON\_67 VEL\_80 DUR\_0.25 NOTE\_OFF\_67}
     \item \texttt{remilike}: repeating quadruplets, e.g., \texttt{POS\_0.5 PITCH\_67 VEL\_80 DUR\_0.25}
 \end{itemize}
 
-For pitch-set inputs in label tasks, serialization is also tokenizer-specific: \texttt{note\_level} uses bracketed note-name sets (e.g., \texttt{[C4,E4,G4]}), \texttt{midilike} uses \texttt{CHORD\_NOTE\_60 CHORD\_NOTE\_64 CHORD\_NOTE\_67}, and \texttt{remilike} uses pitch-class tokens (e.g., \texttt{PitchClass\_0 PitchClass\_4 PitchClass\_7}).
+For pitch-set inputs in label tasks, serialization is also tokenizer-specific: note\_level uses bracketed note-name sets (e.g., \texttt{[C4,E4,G4]}), \texttt{midilike} uses \texttt{CHORD\_NOTE\_60 CHORD\_NOTE\_64 CHORD\_NOTE\_67}, and \texttt{remilike} uses pitch-class tokens (e.g., \texttt{PitchClass\_0 PitchClass\_4 PitchClass\_7}).
 
-The exporter rewrites \texttt{input}, \texttt{target}, \texttt{system\_prompt}, and \texttt{user\_prompt} for each tokenizer while keeping \texttt{id/task/payload/target\_payload} aligned. The validator first enforces identical ID order across tokenizer files, then decodes every sequence-task target back into events and checks exact equality with the canonical \texttt{target\_payload}.
+During view export, input/target strings and prompt text are regenerated for each tokenizer, while case identity and underlying musical payload remain fixed. Validation then applies two consistency checks: identical case ordering across tokenizer files, and exact match between decoded sequence targets and the canonical event-level targets.
 
 \subsection{Prompt Design and Composition}
 
@@ -132,7 +132,7 @@ Two prompt modes are supported:
     \item \texttt{agent\_like}: strict output-only rules, explicit no-extra-text constraints, tokenizer grammar constraints, and task-specific operation rules.
 \end{itemize}
 
-\begin{table}[t]
+\begin{table}[hb]
   \centering
   \caption{Task groups, outputs, and primary checks in the released benchmark.}
   \label{tab:tasks}
@@ -140,18 +140,18 @@ Two prompt modes are supported:
     \toprule
     Task group & Output field & Primary checks \\
     \midrule
-    Label classification & \texttt{prediction\_label} & hit/miss by exact match \\
-    Sequence transformation & \texttt{prediction\_notes} & hit/miss by exact sequence match \\
+    Label classification & \texttt{label} & hit/miss by exact match \\
+    Sequence transformation & \texttt{notes} & hit/miss by exact sequence match \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-\begin{figure}[t]
+\begin{figure*}[t]
   \centering
-  \includegraphics[width=\columnwidth]{figures/benchmark-architecture.png}
+  \includegraphics[width=0.97\textwidth]{figures/benchmark-architecture.png}
   \caption{Benchmark architecture from generation and view export to model execution and scoring.}
   \label{fig:architecture}
-\end{figure}
+\end{figure*}
 
 \section{Experimental Protocol}
 \label{sec:protocol}
@@ -196,7 +196,8 @@ Repository pilot runs show heterogeneous behavior across tasks and tokenizers. L
 
 Table~\ref{tab:taskwise-acc} reports per-task hit-rate accuracy for four models across three tokenizer views. Each cell is exact-match hit rate for a single task (20 cases per task in this run configuration).
 
-\begin{table*}[t]
+\vspace{1em}
+\begin{table*}[hb]
   \centering
   \caption{Task-wise exact-match accuracy across models and tokenizer views. T1--T4 are label tasks; T5--T8 are sequence-transformation tasks.}
   \label{tab:taskwise-acc}
