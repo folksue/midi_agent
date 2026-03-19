@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-RAW_DECK="${1:-docs/presentation/paper-proposal-deck-raw.pptx}"
-FINAL_DECK="${2:-docs/presentation/paper-proposal-deck.pptx}"
-ROUNDTRIP_DIR="${3:-docs/presentation/roundtrip}"
+RAW_DECK="${1:-supporting-docs/presentation/paper-proposal-deck-raw.pptx}"
+FINAL_DECK="${2:-supporting-docs/presentation/paper-proposal-deck.pptx}"
+ROUNDTRIP_DIR="${3:-supporting-docs/presentation/roundtrip}"
 SOFFICE_BIN="${SOFFICE_BIN:-/Applications/LibreOffice.app/Contents/MacOS/soffice}"
 RAW_BASE="$(basename "${RAW_DECK%.*}")"
 ODP_PATH="${ROUNDTRIP_DIR}/${RAW_BASE}.odp"

@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Symbolic Music Benchmark Visual Demo</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #f5f8fb;
+      --panel: rgba(255, 255, 255, 0.94);
+      --ink: #17212b;
+      --muted: #64748b;
+      --accent: #0f766e;
+      --accent-soft: #ddf4f1;
+      --line: #d7e2ea;
+      --shadow: 0 24px 70px rgba(15, 23, 42, 0.10);
+      --warn: #92400e;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Aptos", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(15,118,110,0.10), transparent 30%),
+        radial-gradient(circle at top right, rgba(59,130,246,0.09), transparent 22%),
+        linear-gradient(180deg, #f9fcff 0%, var(--bg) 100%);
+    }
+    .wrap {
+      width: min(1260px, calc(100vw - 28px));
+      margin: 26px auto 40px;
+    }
+    .hero, .panel {
+      background: var(--panel);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+    .hero {
+      padding: 28px;
+      margin-bottom: 18px;
+    }
+    .eyebrow {
+      display: inline-block;
+      padding: 5px 11px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      background: var(--accent-soft);
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      line-height: 0.98;
+      letter-spacing: -0.03em;
+    }
+    h2 {
+      margin: 0 0 8px;
+      font-size: 1.08rem;
+    }
+    p, li { line-height: 1.5; }
+    .hero p,
+    .muted {
+      color: var(--muted);
+    }
+    .notice {
+      padding: 14px;
+      border-radius: 16px;
+      background: #fff8e8;
+      border: 1px solid #f7d999;
+      color: var(--warn);
+      margin-top: 14px;
+    }
+    .grid {
+      display: grid;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+    .grid.cards {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+    .grid.two {
+      grid-template-columns: 1.1fr 0.9fr;
+    }
+    .grid.charts {
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    }
+    .panel {
+      padding: 20px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      background: rgba(255,255,255,0.72);
+    }
+    .card .label {
+      font-size: 0.84rem;
+      color: var(--muted);
+    }
+    .card .value {
+      margin-top: 8px;
+      font-size: 1.45rem;
+      font-weight: 700;
+    }
+    .path {
+      margin-top: 8px;
+      color: #155e75;
+      font-size: 0.81rem;
+      word-break: break-word;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    .chart-wrap {
+      position: relative;
+      min-height: 300px;
+    }
+    canvas {
+      width: 100% !important;
+      height: 300px !important;
+    }
+    pre {
+      margin: 0;
+      padding: 16px;
+      border-radius: 16px;
+      background: #0f172a;
+      color: #dbeafe;
+      overflow: auto;
+      border: 1px solid #1e293b;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.93rem;
+    }
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .heatmap table td {
+      text-align: center;
+      min-width: 74px;
+      font-variant-numeric: tabular-nums;
+    }
+    .badge {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: #edf6f5;
+      color: var(--accent);
+      font-size: 0.78rem;
+    }
+    .stack > * + * {
+      margin-top: 12px;
+    }
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 980px) {
+      .grid.two,
+      .split {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="eyebrow">GitHub Pages visual demo</div>
+      <h1>Symbolic Music Benchmark Visual Demo</h1>
+      <p>
+        This dashboard publishes benchmark outputs, run comparisons, and sample cases from the current repository state.
+        It is designed for sharing results and inspecting benchmark behavior across tasks, tokenizers, and available model runs.
+      </p>
+      <div class="notice">
+        This page is static. To execute the benchmark locally, use <code>benchmark_web.py</code> or
+        <code>bash scripts/run_visual_demo_workflow.sh</code>, then rebuild the assets with
+        <code>python3 scripts/build_visual_demo_site.py</code>.
+      </div>
+    </section>
+
+    <section class="grid cards" id="summaryCards"></section>
+
+    <section class="grid two">
+      <section class="panel stack">
+        <div>
+          <h2>Current Snapshot</h2>
+          <p class="muted" id="snapshotMeta">Loading snapshot metadata…</p>
+        </div>
+        <div>
+          <h2>How To Refresh Locally</h2>
+          <pre id="quickCommands"></pre>
+        </div>
+      </section>
+
+      <section class="panel stack">
+        <div>
+          <h2>Run Inventory</h2>
+          <p class="muted">The visual demo can compare any run bundle that writes <code>overall*.json</code>, <code>by_task*.json</code>, and related evaluation artifacts into <code>benchmark/results/</code>.</p>
+        </div>
+        <div id="runInventoryMeta" class="muted">Loading run inventory…</div>
+      </section>
+    </section>
+
+    <section class="grid charts">
+      <section class="panel">
+        <h2>Overall Accuracy by Run</h2>
+        <p class="muted">High-level comparison across all detected runs.</p>
+        <div class="chart-wrap"><canvas id="overallChart"></canvas></div>
+      </section>
+
+      <section class="panel">
+        <h2>Average Accuracy by Task</h2>
+        <p class="muted">Task-level average across all available runs.</p>
+        <div class="chart-wrap"><canvas id="taskAverageChart"></canvas></div>
+      </section>
+
+      <section class="panel">
+        <h2>Tokenizer Comparison</h2>
+        <p class="muted">Compare run families across <code>note_level</code>, <code>midilike</code>, and <code>remilike</code>.</p>
+        <div class="chart-wrap"><canvas id="tokenizerChart"></canvas></div>
+      </section>
+
+      <section class="panel">
+        <h2>Task Accuracy by Latest Runs</h2>
+        <p class="muted">Grouped task comparison for the most recent runs available in the repo.</p>
+        <div class="chart-wrap"><canvas id="taskByRunChart"></canvas></div>
+      </section>
+    </section>
+
+    <section class="grid two">
+      <section class="panel heatmap">
+        <h2>Run × Task Heatmap</h2>
+        <p class="muted">A compact matrix view for seeing where different runs behave similarly or diverge.</p>
+        <div id="heatmapTable">Loading heatmap…</div>
+      </section>
+
+      <section class="panel">
+        <h2>Source Distribution</h2>
+        <p class="muted">How many evaluated runs are currently available by source family.</p>
+        <div class="chart-wrap"><canvas id="sourceChart"></canvas></div>
+      </section>
+    </section>
+
+    <section class="grid two">
+      <section class="panel">
+        <h2>Available Runs</h2>
+        <div id="runsTable">Loading run table…</div>
+      </section>
+
+      <section class="panel">
+        <h2>Sample Cases</h2>
+        <div id="sampleCases">Loading sample cases…</div>
+      </section>
+    </section>
+  </div>
+
+  <script>
+    const palette = [
+      '#0f766e', '#2563eb', '#ea580c', '#7c3aed', '#db2777', '#0891b2',
+      '#65a30d', '#dc2626', '#4f46e5', '#c2410c', '#0f766e', '#4338ca'
+    ];
+
+    function formatNumber(value, digits = 3) {
+      return typeof value === 'number' ? value.toFixed(digits) : 'n/a';
+    }
+
+    function colorForIndex(index, alpha = 0.85) {
+      const hex = palette[index % palette.length].replace('#', '');
+      const bigint = parseInt(hex, 16);
+      const r = (bigint >> 16) & 255;
+      const g = (bigint >> 8) & 255;
+      const b = bigint & 255;
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+
+    function heatColor(value) {
+      if (typeof value !== 'number') return '#f8fafc';
+      const green = Math.round(210 + value * 30);
+      const red = Math.round(255 - value * 90);
+      const blue = Math.round(240 - value * 110);
+      return `rgb(${red}, ${green}, ${blue})`;
+    }
+
+    async function getJson(path) {
+      const response = await fetch(path);
+      if (!response.ok) throw new Error(`Failed to load ${path}`);
+      return response.json();
+    }
+
+    function renderSummaryCards(status, runCatalog) {
+      const latestRun = runCatalog[0] || null;
+      const cards = [
+        ['Raw rows', status.outputs.raw.count, status.outputs.raw.path],
+        ['note_level cases', status.outputs.cases.note_level.count, status.outputs.cases.note_level.path],
+        ['Runs detected', runCatalog.length, 'benchmark/results/**/overall*.json'],
+        ['Latest run', latestRun ? formatNumber(latestRun.accuracy) : 'n/a', latestRun ? latestRun.display_label : 'No run detected'],
+        ['Oracle snapshot', status.runs.oracle.latest_accuracy_text || 'n/a', status.runs.oracle.path || 'Run oracle locally to populate this'],
+        ['Custom snapshot', status.runs.custom.latest_accuracy_text || 'n/a', status.runs.custom.path || 'Evaluate a prediction file locally to populate this'],
+      ];
+
+      document.getElementById('summaryCards').innerHTML = cards.map(([label, value, path]) => `
+        <section class="panel card">
+          <div class="label">${label}</div>
+          <div class="value">${value}</div>
+          <div class="path">${path}</div>
+        </section>
+      `).join('');
+    }
+
+    function renderMeta(status, runCatalog) {
+      document.getElementById('snapshotMeta').textContent =
+        `Generated at ${status.generated_at}. Latest oracle tokenizer: ${status.runs.oracle.tokenizer}. Available evaluated runs: ${runCatalog.length}.`;
+      document.getElementById('runInventoryMeta').innerHTML =
+        runCatalog.length
+          ? `Latest run: <span class="badge">${runCatalog[0].display_label}</span> · Updated ${runCatalog[0].updated_at}`
+          : 'No evaluated runs were found yet.';
+      document.getElementById('quickCommands').textContent = [
+        'Run the complete local demo:',
+        'bash scripts/run_visual_demo_workflow.sh 8 agent_like yes',
+        '',
+        'Or use the local web app:',
+        'python3 benchmark_web.py',
+        '',
+        'Then rebuild the static visual demo:',
+        'python3 scripts/build_visual_demo_site.py'
+      ].join('\n');
+    }
+
+    function destroyChart(canvasId) {
+      const existing = Chart.getChart(canvasId);
+      if (existing) existing.destroy();
+    }
+
+    function renderBarChart(canvasId, labels, datasets, options = {}) {
+      destroyChart(canvasId);
+      const ctx = document.getElementById(canvasId);
+      if (!ctx) return;
+      new Chart(ctx, {
+        type: options.type || 'bar',
+        data: { labels, datasets },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 1,
+              ticks: { callback: value => Number(value).toFixed(1) }
+            },
+            x: {
+              ticks: {
+                maxRotation: 55,
+                minRotation: 0,
+                autoSkip: false
+              }
+            }
+          },
+          plugins: {
+            legend: { position: 'bottom' },
+            tooltip: {
+              callbacks: {
+                label: context => `${context.dataset.label}: ${formatNumber(context.parsed.y, 3)}`
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function renderOverallChart(chartData) {
+      const labels = chartData.overall_runs.map(run => run.display_label);
+      const dataset = [{
+        label: 'Overall accuracy',
+        data: chartData.overall_runs.map(run => run.accuracy),
+        backgroundColor: chartData.overall_runs.map((_, idx) => colorForIndex(idx)),
+        borderRadius: 6
+      }];
+      renderBarChart('overallChart', labels, dataset);
+    }
+
+    function renderTaskAverageChart(chartData) {
+      const labels = chartData.task_average.map(row => row.label);
+      const dataset = [{
+        label: 'Average task accuracy',
+        data: chartData.task_average.map(row => row.accuracy),
+        backgroundColor: chartData.task_average.map((_, idx) => colorForIndex(idx)),
+        borderRadius: 6
+      }];
+      renderBarChart('taskAverageChart', labels, dataset);
+    }
+
+    function renderTokenizerChart(chartData) {
+      const labels = chartData.tokenizer_comparison.labels;
+      const datasets = chartData.tokenizer_comparison.datasets.map((row, idx) => ({
+        label: row.label,
+        data: row.data,
+        backgroundColor: colorForIndex(idx, 0.72),
+        borderRadius: 6
+      }));
+      renderBarChart('tokenizerChart', labels, datasets);
+    }
+
+    function renderTaskByRunChart(chartData) {
+      const labels = chartData.task_by_run.labels;
+      const datasets = chartData.task_by_run.datasets.map((row, idx) => ({
+        label: row.label,
+        data: row.data,
+        backgroundColor: colorForIndex(idx, 0.74),
+        borderRadius: 6
+      }));
+      renderBarChart('taskByRunChart', labels, datasets);
+    }
+
+    function renderSourceChart(chartData) {
+      destroyChart('sourceChart');
+      const ctx = document.getElementById('sourceChart');
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: chartData.source_counts.labels,
+          datasets: [{
+            label: 'Runs by source',
+            data: chartData.source_counts.data,
+            backgroundColor: chartData.source_counts.labels.map((_, idx) => colorForIndex(idx, 0.82)),
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom' }
+          }
+        }
+      });
+    }
+
+    function renderHeatmap(chartData) {
+      const header = chartData.heatmap.cols.map(col => `<th>${col}</th>`).join('');
+      const body = chartData.heatmap.rows.map((row, rowIndex) => {
+        const values = chartData.heatmap.values[rowIndex] || [];
+        const cells = values.map(value => `
+          <td style="background:${heatColor(value)}">${typeof value === 'number' ? value.toFixed(3) : '—'}</td>
+        `).join('');
+        return `<tr><th>${row}</th>${cells}</tr>`;
+      }).join('');
+      document.getElementById('heatmapTable').innerHTML = `
+        <table>
+          <thead><tr><th>Run</th>${header}</tr></thead>
+          <tbody>${body}</tbody>
+        </table>
+      `;
+    }
+
+    function renderRunsTable(runCatalog) {
+      if (!runCatalog.length) {
+        document.getElementById('runsTable').innerHTML = '<p class="muted">No run artifacts detected yet.</p>';
+        return;
+      }
+      const rows = runCatalog.map(run => `
+        <tr>
+          <td>${run.display_label}</td>
+          <td>${run.source}</td>
+          <td>${run.tokenizer}</td>
+          <td>${formatNumber(run.accuracy)}</td>
+          <td>${run.cases ?? 0}</td>
+          <td>${run.updated_at}</td>
+        </tr>
+      `).join('');
+      document.getElementById('runsTable').innerHTML = `
+        <table>
+          <thead>
+            <tr><th>Run</th><th>Source</th><th>Tokenizer</th><th>Accuracy</th><th>Cases</th><th>Updated</th></tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+    }
+
+    function renderSampleCases(status) {
+      const rows = status.sample_cases || [];
+      if (!rows.length) {
+        document.getElementById('sampleCases').innerHTML = '<p class="muted">No sample cases are available yet. Generate benchmark data locally first.</p>';
+        return;
+      }
+      document.getElementById('sampleCases').innerHTML = `
+        <table>
+          <thead>
+            <tr><th>Case</th><th>Task</th><th>Input preview</th><th>Ground truth</th></tr>
+          </thead>
+          <tbody>
+            ${rows.map(row => `
+              <tr>
+                <td>${row.case_id}</td>
+                <td>${row.task}</td>
+                <td>${row.input_preview}</td>
+                <td>${row.ground_truth}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    async function main() {
+      try {
+        const [status, runCatalog, chartData] = await Promise.all([
+          getJson('assets/status.json'),
+          getJson('assets/run_catalog.json'),
+          getJson('assets/chart_data.json')
+        ]);
+        renderSummaryCards(status, runCatalog);
+        renderMeta(status, runCatalog);
+        renderOverallChart(chartData);
+        renderTaskAverageChart(chartData);
+        renderTokenizerChart(chartData);
+        renderTaskByRunChart(chartData);
+        renderSourceChart(chartData);
+        renderHeatmap(chartData);
+        renderRunsTable(runCatalog);
+        renderSampleCases(status);
+      } catch (error) {
+        const localHint = location.protocol === 'file:'
+          ? '<p>It looks like you opened this page directly from the filesystem. Please serve <code>visual-demo/</code> through a local HTTP server instead.</p><pre>bash scripts/run_visual_demo_server.sh</pre>'
+          : '';
+        document.body.innerHTML = `<div class="wrap"><section class="hero"><h1>Visual demo unavailable</h1><p>${error.message}</p>${localHint}</section></div>`;
+      }
+    }
+
+    main();
+  </script>
+</body>
+</html>

@@ -1,0 +1,398 @@
+[
+  {
+    "case_id": "task1_interval_identification-000000",
+    "task": "task1_interval_identification",
+    "tokenizer": "remilike",
+    "prompt_mode": "agent_like",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a strict music label classifier.\nRules:\n1) Output ONLY one final label token string.\n2) No explanations, no markdown, no extra text.\n3) Identify the interval between the two given notes by semitone distance.\nOutput exactly one label from:\nunison, minor_second, major_second, minor_third, major_third, perfect_fourth, tritone, perfect_fifth, minor_sixth, major_sixth, minor_seventh, major_seventh, octave.\n4) Input notes are serialized as remilike tokens: POS_<T> PITCH_<P> VEL_<V> DUR_<D>."
+      },
+      {
+        "role": "user",
+        "content": "Determine the interval class between the two notes.\nnotes: POS_0 PITCH_58 VEL_80 DUR_1 POS_0 PITCH_61 VEL_80 DUR_1"
+      }
+    ],
+    "model_input": {
+      "system_prompt": "You are a strict music label classifier.\nRules:\n1) Output ONLY one final label token string.\n2) No explanations, no markdown, no extra text.\n3) Identify the interval between the two given notes by semitone distance.\nOutput exactly one label from:\nunison, minor_second, major_second, minor_third, major_third, perfect_fourth, tritone, perfect_fifth, minor_sixth, major_sixth, minor_seventh, major_seventh, octave.\n4) Input notes are serialized as remilike tokens: POS_<T> PITCH_<P> VEL_<V> DUR_<D>.",
+      "user_prompt": "Determine the interval class between the two notes.\nnotes: POS_0 PITCH_58 VEL_80 DUR_1 POS_0 PITCH_61 VEL_80 DUR_1"
+    },
+    "prompt_parts": {
+      "question_body": "Interval Identification",
+      "task_description": "Determine the interval class between the two notes.",
+      "instance_lines": [
+        "notes: POS_0 PITCH_58 VEL_80 DUR_1 POS_0 PITCH_61 VEL_80 DUR_1"
+      ],
+      "control_params": {},
+      "answer_constraint": "Return only one label token string.",
+      "melody_input_tokens": "POS_0 PITCH_58 VEL_80 DUR_1 POS_0 PITCH_61 VEL_80 DUR_1"
+    },
+    "user_prompt_recomposed": "Determine the interval class between the two notes.\nnotes: POS_0 PITCH_58 VEL_80 DUR_1 POS_0 PITCH_61 VEL_80 DUR_1",
+    "melody_input_tokens": "POS_0 PITCH_58 VEL_80 DUR_1 POS_0 PITCH_61 VEL_80 DUR_1",
+    "melody_target_tokens": "",
+    "control_params": {},
+    "ground_truth": "minor_third",
+    "payload": {
+      "notes": [
+        {
+          "t": 0.0,
+          "p": 58,
+          "d": 1.0,
+          "v": 80
+        },
+        {
+          "t": 0.0,
+          "p": 61,
+          "d": 1.0,
+          "v": 80
+        }
+      ]
+    },
+    "target_payload": "minor_third",
+    "model_output": "minor_third",
+    "hit_ground_truth": true,
+    "match_status": "hit",
+    "match_detail": "text_equal",
+    "text_token_error_rate": 0.0,
+    "text_char_error_rate": 0.0,
+    "model_name": "oracle-remilike"
+  },
+  {
+    "case_id": "task1_interval_identification-000001",
+    "task": "task1_interval_identification",
+    "tokenizer": "remilike",
+    "prompt_mode": "agent_like",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a strict music label classifier.\nRules:\n1) Output ONLY one final label token string.\n2) No explanations, no markdown, no extra text.\n3) Identify the interval between the two given notes by semitone distance.\nOutput exactly one label from:\nunison, minor_second, major_second, minor_third, major_third, perfect_fourth, tritone, perfect_fifth, minor_sixth, major_sixth, minor_seventh, major_seventh, octave.\n4) Input notes are serialized as remilike tokens: POS_<T> PITCH_<P> VEL_<V> DUR_<D>."
+      },
+      {
+        "role": "user",
+        "content": "Determine the interval class between the two notes.\nnotes: POS_0 PITCH_60 VEL_80 DUR_1 POS_0 PITCH_72 VEL_80 DUR_1"
+      }
+    ],
+    "model_input": {
+      "system_prompt": "You are a strict music label classifier.\nRules:\n1) Output ONLY one final label token string.\n2) No explanations, no markdown, no extra text.\n3) Identify the interval between the two given notes by semitone distance.\nOutput exactly one label from:\nunison, minor_second, major_second, minor_third, major_third, perfect_fourth, tritone, perfect_fifth, minor_sixth, major_sixth, minor_seventh, major_seventh, octave.\n4) Input notes are serialized as remilike tokens: POS_<T> PITCH_<P> VEL_<V> DUR_<D>.",
+      "user_prompt": "Determine the interval class between the two notes.\nnotes: POS_0 PITCH_60 VEL_80 DUR_1 POS_0 PITCH_72 VEL_80 DUR_1"
+    },
+    "prompt_parts": {
+      "question_body": "Interval Identification",
+      "task_description": "Determine the interval class between the two notes.",
+      "instance_lines": [
+        "notes: POS_0 PITCH_60 VEL_80 DUR_1 POS_0 PITCH_72 VEL_80 DUR_1"
+      ],
+      "control_params": {},
+      "answer_constraint": "Return only one label token string.",
+      "melody_input_tokens": "POS_0 PITCH_60 VEL_80 DUR_1 POS_0 PITCH_72 VEL_80 DUR_1"
+    },
+    "user_prompt_recomposed": "Determine the interval class between the two notes.\nnotes: POS_0 PITCH_60 VEL_80 DUR_1 POS_0 PITCH_72 VEL_80 DUR_1",
+    "melody_input_tokens": "POS_0 PITCH_60 VEL_80 DUR_1 POS_0 PITCH_72 VEL_80 DUR_1",
+    "melody_target_tokens": "",
+    "control_params": {},
+    "ground_truth": "octave",
+    "payload": {
+      "notes": [
+        {
+          "t": 0.0,
+          "p": 60,
+          "d": 1.0,
+          "v": 80
+        },
+        {
+          "t": 0.0,
+          "p": 72,
+          "d": 1.0,
+          "v": 80
+        }
+      ]
+    },
+    "target_payload": "octave",
+    "model_output": "octave",
+    "hit_ground_truth": true,
+    "match_status": "hit",
+    "match_detail": "text_equal",
+    "text_token_error_rate": 0.0,
+    "text_char_error_rate": 0.0,
+    "model_name": "oracle-remilike"
+  },
+  {
+    "case_id": "task2_chord_identification-000002",
+    "task": "task2_chord_identification",
+    "tokenizer": "remilike",
+    "prompt_mode": "agent_like",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a strict music label classifier.\nRules:\n1) Output ONLY one final label token string.\n2) No explanations, no markdown, no extra text.\n3) Identify chord root and quality from the given simultaneity of notes.\nOutput exactly one chord label string in one of these forms:\n<ROOT>_major | <ROOT>_minor | <ROOT>_diminished | <ROOT>_augmented | <ROOT>7\nROOT must be one of: C, C#, D, D#, E, F, F#, G, G#, A, A#, B.\n4) Input notes are serialized as remilike tokens: POS_<T> PITCH_<P> VEL_<V> DUR_<D>."
+      },
+      {
+        "role": "user",
+        "content": "Infer chord root and quality from the simultaneous notes.\nnotes: POS_0 PITCH_61 VEL_80 DUR_1 POS_0 PITCH_65 VEL_80 DUR_1 POS_0 PITCH_68 VEL_80 DUR_1"
+      }
+    ],
+    "model_input": {
+      "system_prompt": "You are a strict music label classifier.\nRules:\n1) Output ONLY one final label token string.\n2) No explanations, no markdown, no extra text.\n3) Identify chord root and quality from the given simultaneity of notes.\nOutput exactly one chord label string in one of these forms:\n<ROOT>_major | <ROOT>_minor | <ROOT>_diminished | <ROOT>_augmented | <ROOT>7\nROOT must be one of: C, C#, D, D#, E, F, F#, G, G#, A, A#, B.\n4) Input notes are serialized as remilike tokens: POS_<T> PITCH_<P> VEL_<V> DUR_<D>.",
+      "user_prompt": "Infer chord root and quality from the simultaneous notes.\nnotes: POS_0 PITCH_61 VEL_80 DUR_1 POS_0 PITCH_65 VEL_80 DUR_1 POS_0 PITCH_68 VEL_80 DUR_1"
+    },
+    "prompt_parts": {
+      "question_body": "Chord Identification",
+      "task_description": "Infer chord root and quality from the simultaneous notes.",
+      "instance_lines": [
+        "notes: POS_0 PITCH_61 VEL_80 DUR_1 POS_0 PITCH_65 VEL_80 DUR_1 POS_0 PITCH_68 VEL_80 DUR_1"
+      ],
+      "control_params": {},
+      "answer_constraint": "Return only one label token string.",
+      "melody_input_tokens": "POS_0 PITCH_61 VEL_80 DUR_1 POS_0 PITCH_65 VEL_80 DUR_1 POS_0 PITCH_68 VEL_80 DUR_1"
+    },
+    "user_prompt_recomposed": "Infer chord root and quality from the simultaneous notes.\nnotes: POS_0 PITCH_61 VEL_80 DUR_1 POS_0 PITCH_65 VEL_80 DUR_1 POS_0 PITCH_68 VEL_80 DUR_1",
+    "melody_input_tokens": "POS_0 PITCH_61 VEL_80 DUR_1 POS_0 PITCH_65 VEL_80 DUR_1 POS_0 PITCH_68 VEL_80 DUR_1",
+    "melody_target_tokens": "",
+    "control_params": {},
+    "ground_truth": "C#_major",
+    "payload": {
+      "notes": [
+        {
+          "t": 0.0,
+          "p": 61,
+          "d": 1.0,
+          "v": 80
+        },
+        {
+          "t": 0.0,
+          "p": 65,
+          "d": 1.0,
+          "v": 80
+        },
+        {
+          "t": 0.0,
+          "p": 68,
+          "d": 1.0,
+          "v": 80
+        }
+      ]
+    },
+    "target_payload": "C#_major",
+    "model_output": "C#_major",
+    "hit_ground_truth": true,
+    "match_status": "hit",
+    "match_detail": "text_equal",
+    "text_token_error_rate": 0.0,
+    "text_char_error_rate": 0.0,
+    "model_name": "oracle-remilike"
+  },
+  {
+    "case_id": "task2_chord_identification-000003",
+    "task": "task2_chord_identification",
+    "tokenizer": "remilike",
+    "prompt_mode": "agent_like",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a strict music label classifier.\nRules:\n1) Output ONLY one final label token string.\n2) No explanations, no markdown, no extra text.\n3) Identify chord root and quality from the given simultaneity of notes.\nOutput exactly one chord label string in one of these forms:\n<ROOT>_major | <ROOT>_minor | <ROOT>_diminished | <ROOT>_augmented | <ROOT>7\nROOT must be one of: C, C#, D, D#, E, F, F#, G, G#, A, A#, B.\n4) Input notes are serialized as remilike tokens: POS_<T> PITCH_<P> VEL_<V> DUR_<D>."
+      },
+      {
+        "role": "user",
+        "content": "Infer chord root and quality from the simultaneous notes.\nnotes: POS_0 PITCH_61 VEL_80 DUR_1 POS_0 PITCH_65 VEL_80 DUR_1 POS_0 PITCH_68 VEL_80 DUR_1 POS_0 PITCH_71 VEL_80 DUR_1"
+      }
+    ],
+    "model_input": {
+      "system_prompt": "You are a strict music label classifier.\nRules:\n1) Output ONLY one final label token string.\n2) No explanations, no markdown, no extra text.\n3) Identify chord root and quality from the given simultaneity of notes.\nOutput exactly one chord label string in one of these forms:\n<ROOT>_major | <ROOT>_minor | <ROOT>_diminished | <ROOT>_augmented | <ROOT>7\nROOT must be one of: C, C#, D, D#, E, F, F#, G, G#, A, A#, B.\n4) Input notes are serialized as remilike tokens: POS_<T> PITCH_<P> VEL_<V> DUR_<D>.",
+      "user_prompt": "Infer chord root and quality from the simultaneous notes.\nnotes: POS_0 PITCH_61 VEL_80 DUR_1 POS_0 PITCH_65 VEL_80 DUR_1 POS_0 PITCH_68 VEL_80 DUR_1 POS_0 PITCH_71 VEL_80 DUR_1"
+    },
+    "prompt_parts": {
+      "question_body": "Chord Identification",
+      "task_description": "Infer chord root and quality from the simultaneous notes.",
+      "instance_lines": [
+        "notes: POS_0 PITCH_61 VEL_80 DUR_1 POS_0 PITCH_65 VEL_80 DUR_1 POS_0 PITCH_68 VEL_80 DUR_1 POS_0 PITCH_71 VEL_80 DUR_1"
+      ],
+      "control_params": {},
+      "answer_constraint": "Return only one label token string.",
+      "melody_input_tokens": "POS_0 PITCH_61 VEL_80 DUR_1 POS_0 PITCH_65 VEL_80 DUR_1 POS_0 PITCH_68 VEL_80 DUR_1 POS_0 PITCH_71 VEL_80 DUR_1"
+    },
+    "user_prompt_recomposed": "Infer chord root and quality from the simultaneous notes.\nnotes: POS_0 PITCH_61 VEL_80 DUR_1 POS_0 PITCH_65 VEL_80 DUR_1 POS_0 PITCH_68 VEL_80 DUR_1 POS_0 PITCH_71 VEL_80 DUR_1",
+    "melody_input_tokens": "POS_0 PITCH_61 VEL_80 DUR_1 POS_0 PITCH_65 VEL_80 DUR_1 POS_0 PITCH_68 VEL_80 DUR_1 POS_0 PITCH_71 VEL_80 DUR_1",
+    "melody_target_tokens": "",
+    "control_params": {},
+    "ground_truth": "C#7",
+    "payload": {
+      "notes": [
+        {
+          "t": 0.0,
+          "p": 61,
+          "d": 1.0,
+          "v": 80
+        },
+        {
+          "t": 0.0,
+          "p": 65,
+          "d": 1.0,
+          "v": 80
+        },
+        {
+          "t": 0.0,
+          "p": 68,
+          "d": 1.0,
+          "v": 80
+        },
+        {
+          "t": 0.0,
+          "p": 71,
+          "d": 1.0,
+          "v": 80
+        }
+      ]
+    },
+    "target_payload": "C#7",
+    "model_output": "C#7",
+    "hit_ground_truth": true,
+    "match_status": "hit",
+    "match_detail": "text_equal",
+    "text_token_error_rate": 0.0,
+    "text_char_error_rate": 0.0,
+    "model_name": "oracle-remilike"
+  },
+  {
+    "case_id": "task3_harmonic_function-000004",
+    "task": "task3_harmonic_function",
+    "tokenizer": "remilike",
+    "prompt_mode": "agent_like",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a strict music label classifier.\nRules:\n1) Output ONLY one final label token string.\n2) No explanations, no markdown, no extra text.\n3) Classify the chord's harmonic function in C major context.\nOutput exactly one label from: tonic, predominant, dominant.\n4) Input notes are serialized as remilike tokens: POS_<T> PITCH_<P> VEL_<V> DUR_<D>."
+      },
+      {
+        "role": "user",
+        "content": "Classify the chord function in C major from the chord-note tokens.\nchord_notes: POS_0 PITCH_64 VEL_80 DUR_1 POS_0 PITCH_67 VEL_80 DUR_1 POS_0 PITCH_71 VEL_80 DUR_1"
+      }
+    ],
+    "model_input": {
+      "system_prompt": "You are a strict music label classifier.\nRules:\n1) Output ONLY one final label token string.\n2) No explanations, no markdown, no extra text.\n3) Classify the chord's harmonic function in C major context.\nOutput exactly one label from: tonic, predominant, dominant.\n4) Input notes are serialized as remilike tokens: POS_<T> PITCH_<P> VEL_<V> DUR_<D>.",
+      "user_prompt": "Classify the chord function in C major from the chord-note tokens.\nchord_notes: POS_0 PITCH_64 VEL_80 DUR_1 POS_0 PITCH_67 VEL_80 DUR_1 POS_0 PITCH_71 VEL_80 DUR_1"
+    },
+    "prompt_parts": {
+      "question_body": "Harmonic Function",
+      "task_description": "Classify the chord function in C major from the chord-note tokens.",
+      "instance_lines": [
+        "chord_notes: POS_0 PITCH_64 VEL_80 DUR_1 POS_0 PITCH_67 VEL_80 DUR_1 POS_0 PITCH_71 VEL_80 DUR_1"
+      ],
+      "control_params": {
+        "key_context": "C_major"
+      },
+      "answer_constraint": "Return only one label token string.",
+      "melody_input_tokens": "POS_0 PITCH_64 VEL_80 DUR_1 POS_0 PITCH_67 VEL_80 DUR_1 POS_0 PITCH_71 VEL_80 DUR_1"
+    },
+    "user_prompt_recomposed": "Classify the chord function in C major from the chord-note tokens.\nchord_notes: POS_0 PITCH_64 VEL_80 DUR_1 POS_0 PITCH_67 VEL_80 DUR_1 POS_0 PITCH_71 VEL_80 DUR_1",
+    "melody_input_tokens": "POS_0 PITCH_64 VEL_80 DUR_1 POS_0 PITCH_67 VEL_80 DUR_1 POS_0 PITCH_71 VEL_80 DUR_1",
+    "melody_target_tokens": "",
+    "control_params": {
+      "key_context": "C_major"
+    },
+    "ground_truth": "tonic",
+    "payload": {
+      "key": "C_major",
+      "chord": "E_minor",
+      "chord_notes": [
+        {
+          "t": 0.0,
+          "p": 64,
+          "d": 1.0,
+          "v": 80
+        },
+        {
+          "t": 0.0,
+          "p": 67,
+          "d": 1.0,
+          "v": 80
+        },
+        {
+          "t": 0.0,
+          "p": 71,
+          "d": 1.0,
+          "v": 80
+        }
+      ]
+    },
+    "target_payload": "tonic",
+    "model_output": "tonic",
+    "hit_ground_truth": true,
+    "match_status": "hit",
+    "match_detail": "text_equal",
+    "text_token_error_rate": 0.0,
+    "text_char_error_rate": 0.0,
+    "model_name": "oracle-remilike"
+  },
+  {
+    "case_id": "task3_harmonic_function-000005",
+    "task": "task3_harmonic_function",
+    "tokenizer": "remilike",
+    "prompt_mode": "agent_like",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a strict music label classifier.\nRules:\n1) Output ONLY one final label token string.\n2) No explanations, no markdown, no extra text.\n3) Classify the chord's harmonic function in C major context.\nOutput exactly one label from: tonic, predominant, dominant.\n4) Input notes are serialized as remilike tokens: POS_<T> PITCH_<P> VEL_<V> DUR_<D>."
+      },
+      {
+        "role": "user",
+        "content": "Classify the chord function in C major from the chord-note tokens.\nchord_notes: POS_0 PITCH_67 VEL_80 DUR_1 POS_0 PITCH_71 VEL_80 DUR_1 POS_0 PITCH_74 VEL_80 DUR_1"
+      }
+    ],
+    "model_input": {
+      "system_prompt": "You are a strict music label classifier.\nRules:\n1) Output ONLY one final label token string.\n2) No explanations, no markdown, no extra text.\n3) Classify the chord's harmonic function in C major context.\nOutput exactly one label from: tonic, predominant, dominant.\n4) Input notes are serialized as remilike tokens: POS_<T> PITCH_<P> VEL_<V> DUR_<D>.",
+      "user_prompt": "Classify the chord function in C major from the chord-note tokens.\nchord_notes: POS_0 PITCH_67 VEL_80 DUR_1 POS_0 PITCH_71 VEL_80 DUR_1 POS_0 PITCH_74 VEL_80 DUR_1"
+    },
+    "prompt_parts": {
+      "question_body": "Harmonic Function",
+      "task_description": "Classify the chord function in C major from the chord-note tokens.",
+      "instance_lines": [
+        "chord_notes: POS_0 PITCH_67 VEL_80 DUR_1 POS_0 PITCH_71 VEL_80 DUR_1 POS_0 PITCH_74 VEL_80 DUR_1"
+      ],
+      "control_params": {
+        "key_context": "C_major"
+      },
+      "answer_constraint": "Return only one label token string.",
+      "melody_input_tokens": "POS_0 PITCH_67 VEL_80 DUR_1 POS_0 PITCH_71 VEL_80 DUR_1 POS_0 PITCH_74 VEL_80 DUR_1"
+    },
+    "user_prompt_recomposed": "Classify the chord function in C major from the chord-note tokens.\nchord_notes: POS_0 PITCH_67 VEL_80 DUR_1 POS_0 PITCH_71 VEL_80 DUR_1 POS_0 PITCH_74 VEL_80 DUR_1",
+    "melody_input_tokens": "POS_0 PITCH_67 VEL_80 DUR_1 POS_0 PITCH_71 VEL_80 DUR_1 POS_0 PITCH_74 VEL_80 DUR_1",
+    "melody_target_tokens": "",
+    "control_params": {
+      "key_context": "C_major"
+    },
+    "ground_truth": "dominant",
+    "payload": {
+      "key": "C_major",
+      "chord": "G_major",
+      "chord_notes": [
+        {
+          "t": 0.0,
+          "p": 67,
+          "d": 1.0,
+          "v": 80
+        },
+        {
+          "t": 0.0,
+          "p": 71,
+          "d": 1.0,
+          "v": 80
+        },
+        {
+          "t": 0.0,
+          "p": 74,
+          "d": 1.0,
+          "v": 80
+        }
+      ]
+    },
+    "target_payload": "dominant",
+    "model_output": "dominant",
+    "hit_ground_truth": true,
+    "match_status": "hit",
+    "match_detail": "text_equal",
+    "text_token_error_rate": 0.0,
+    "text_char_error_rate": 0.0,
+    "model_name": "oracle-remilike"
+  }
+]

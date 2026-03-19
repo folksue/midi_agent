@@ -1,20 +1,20 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-OUT_DIR="${1:-docs/diagrams/png}"
+OUT_DIR="${1:-supporting-docs/diagrams/png}"
 mkdir -p "${OUT_DIR}"
 shopt -s nullglob
 
-MERMAID_FILES=(docs/diagrams/*.mmd)
-PLANTUML_FILES=(docs/diagrams/*.puml)
+MERMAID_FILES=(supporting-docs/diagrams/*.mmd)
+PLANTUML_FILES=(supporting-docs/diagrams/*.puml)
 MMDC_BIN=""
 PLANTUML_BIN=""
-MERMAID_PUPPETEER_CONFIG="docs/presentation/mermaid-puppeteer-config.json"
+MERMAID_PUPPETEER_CONFIG="supporting-docs/presentation/mermaid-puppeteer-config.json"
 
 if command -v mmdc >/dev/null 2>&1; then
   MMDC_BIN="$(command -v mmdc)"
-elif [[ -x "docs/presentation/node_modules/.bin/mmdc" ]]; then
-  MMDC_BIN="docs/presentation/node_modules/.bin/mmdc"
+elif [[ -x "supporting-docs/presentation/node_modules/.bin/mmdc" ]]; then
+  MMDC_BIN="supporting-docs/presentation/node_modules/.bin/mmdc"
 fi
 
 if command -v plantuml >/dev/null 2>&1; then
@@ -35,7 +35,7 @@ if [[ -n "${MMDC_BIN}" ]]; then
   done
 else
   echo "[mermaid] skip: Mermaid CLI was not found"
-  echo "Install Mermaid CLI or run npm install in docs/presentation and rerun this script."
+  echo "Install Mermaid CLI or run npm install in supporting-docs/presentation and rerun this script."
 fi
 
 if [[ -n "${PLANTUML_BIN}" ]]; then
@@ -43,7 +43,7 @@ if [[ -n "${PLANTUML_BIN}" ]]; then
   if ((${#PLANTUML_FILES[@]} > 0)); then
     "${PLANTUML_BIN}" -tpng "${PLANTUML_FILES[@]}"
   fi
-  find docs/diagrams -maxdepth 1 -name '*.png' -exec mv {} "${OUT_DIR}/" \;
+  find supporting-docs/diagrams -maxdepth 1 -name '*.png' -exec mv {} "${OUT_DIR}/" \;
 else
   echo "[plantuml] skip: PlantUML was not found"
   echo "Install PlantUML CLI and rerun this script."

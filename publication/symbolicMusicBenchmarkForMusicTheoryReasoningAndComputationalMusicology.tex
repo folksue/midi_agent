@@ -170,16 +170,16 @@ The primary score is binary hit/miss for all tasks. A prediction is a \emph{hit}
 
 This strict definition keeps task comparisons interpretable across tokenizers and model families. Prediction files are post-processed into case-level annotations with match status; optional diagnostics (e.g., text or note-level error rates) are retained for debugging but are not part of the primary score.
 
-\subsection{Artifacts and Reproducibility}
+% \subsection{Artifacts and Reproducibility}
 
-The repository stores full run artifacts---generated cases, by-task splits, raw predictions, annotated outputs, and summary tables/plots---so every reported number can be traced back to concrete inputs and outputs. This artifact chain is central to the protocol: it supports deterministic reruns, error auditing, and direct comparison of model behavior under identical symbolic conditions.
+% The repository stores full run artifacts---generated cases, by-task splits, raw predictions, annotated outputs, and summary tables/plots---so every reported number can be traced back to concrete inputs and outputs. This artifact chain is central to the protocol: it supports deterministic reruns, error auditing, and direct comparison of model behavior under identical symbolic conditions.
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\columnwidth]{figures/benchmark-usage-flow.png}
-  \caption{Usage flow in the provided suite script: generation, execution, and summarized outputs.}
-  \label{fig:usage}
-\end{figure}
+% \begin{figure}[t]
+%   \centering
+%   \includegraphics[width=\columnwidth]{figures/benchmark-usage-flow.png}
+%   \caption{Usage flow in the provided suite script: generation, execution, and summarized outputs.}
+%   \label{fig:usage}
+% \end{figure}
 
 \section{Results and Analysis}
 \label{sec:results}
@@ -197,7 +197,7 @@ Repository pilot runs show heterogeneous behavior across tasks and tokenizers. L
 Table~\ref{tab:taskwise-acc} reports per-task hit-rate accuracy for four models across three tokenizer views. Each cell is exact-match hit rate for a single task (20 cases per task in this run configuration).
 
 \vspace{1em}
-\begin{table*}[hb]
+\begin{table*}[!htbp]
   \centering
   \caption{Task-wise exact-match accuracy across models and tokenizer views. T1--T4 are label tasks; T5--T8 are sequence-transformation tasks.}
   \label{tab:taskwise-acc}
@@ -227,6 +227,7 @@ Table~\ref{tab:taskwise-acc} reports per-task hit-rate accuracy for four models 
   \end{tabular}%
   }
 \end{table*}
+
 
 \subsection{Observed Failure Modes}
 
@@ -264,6 +265,7 @@ We introduced a reproducible symbolic benchmark for music-theory reasoning in LL
 
 Coding and drafting assistants were used during implementation and manuscript preparation. All benchmark definitions, scripts, and manuscript claims require human verification before submission.
 
+\clearpage
 \bibliographystyle{IEEEtran}
 \bibliography{references}
 

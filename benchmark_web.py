@@ -281,6 +281,18 @@ INDEX_HTML = """<!DOCTYPE html>
         </div>
         <button id="evaluateBtn" class="secondary">Evaluate prediction file</button>
       </section>
+
+      <section class="panel">
+        <h2>4. Run Full Local Demo</h2>
+        <p class="muted">This executes the full local benchmark workflow: generate data, run oracle predictions for all tokenizers, and refresh the visual demo assets with comparison-ready charts.</p>
+        <label for="fullExplain">Explanation layer in oracle runs</label>
+        <select id="fullExplain">
+          <option value="yes">Include target explanations</option>
+          <option value="no">No explanations</option>
+        </select>
+        <button id="fullDemoBtn">Run full local demo</button>
+        <p class="small">This is the fastest way to refresh the local dashboard and the static <code>visual-demo/</code> site together.</p>
+      </section>
     </div>
 
     <section class="panel" style="margin-bottom: 18px;">
@@ -381,7 +393,10 @@ INDEX_HTML = """<!DOCTYPE html>
         'python3 -m benchmark.scripts.make_oracle_predictions --cases benchmark/data/model_io/note_level/all_cases.json --out benchmark/results/webui/oracle/note_level/predictions.jsonl --include-explanations',
         '',
         'Unified evaluation:',
-        'python3 -m benchmark.scripts.eval_predictions --gold benchmark/data/views/note_level/zero_shot.jsonl --pred benchmark/results/webui/oracle/note_level/predictions.jsonl --out benchmark/results/webui/oracle/note_level/eval_predictions.json'
+        'python3 -m benchmark.scripts.eval_predictions --gold benchmark/data/views/note_level/zero_shot.jsonl --pred benchmark/results/webui/oracle/note_level/predictions.jsonl --out benchmark/results/webui/oracle/note_level/eval_predictions.json',
+        '',
+        'Refresh the visual demo:',
+        'bash scripts/run_visual_demo_workflow.sh 8 agent_like yes'
       ].join('\\n');
     }
 
@@ -505,6 +520,13 @@ INDEX_HTML = """<!DOCTYPE html>
       const predictionsPath = document.getElementById('predPath').value.trim();
       const modelName = document.getElementById('customModel').value.trim();
       return apiPost('/api/evaluate', {tokenizer, predictions_path: predictionsPath, model_name: modelName});
+    }));
+
+    document.getElementById('fullDemoBtn').addEventListener('click', () => withAction('Full local demo', async () => {
+      const samplesPerTask = parseInt(document.getElementById('samples').value || '8', 10);
+      const promptMode = document.getElementById('promptMode').value;
+      const includeExplanations = document.getElementById('fullExplain').value === 'yes';
+      return apiPost('/api/full-demo', {samples_per_task: samplesPerTask, prompt_mode: promptMode, include_explanations: includeExplanations});
     }));
 
     document.getElementById('refreshBtn').addEventListener('click', () => withAction('Status refresh', async () => {
@@ -848,6 +870,21 @@ def evaluate_predictions_file(tokenizer: str, predictions_path: str, model_name:
     return "\n\n".join(logs)
 
 
+def build_visual_demo_snapshot() -> str:
+    return _run_step(
+        "Build visual demo snapshot",
+        [PYTHON_BIN, "scripts/build_visual_demo_site.py"],
+    )
+
+
+def run_full_local_demo(samples_per_task: int, prompt_mode: str, include_explanations: bool) -> str:
+    logs = [generate_benchmark(samples_per_task=samples_per_task, prompt_mode=prompt_mode)]
+    for tokenizer in TOKENIZERS:
+        logs.append(run_oracle_demo(tokenizer=tokenizer, include_explanations=include_explanations))
+    logs.append(build_visual_demo_snapshot())
+    return "\n\n".join(logs)
+
+
 def _trim_text(value: object, limit: int = 120) -> str:
     text = " ".join(str(value or "").split())
     return text if len(text) <= limit else text[: limit - 3] + "..."
@@ -1015,6 +1052,15 @@ class BenchmarkWebHandler(BaseHTTPRequestHandler):
                 _json_response(self, {"ok": True, "log": log, "status": get_status_payload()})
                 return
 
+            if parsed.path == "/api/full-demo":
+                log = run_full_local_demo(
+                    samples_per_task=int(payload.get("samples_per_task", 8)),
+                    prompt_mode=str(payload.get("prompt_mode", "agent_like")),
+                    include_explanations=bool(payload.get("include_explanations", True)),
+                )
+                _json_response(self, {"ok": True, "log": log, "status": get_status_payload()})
+                return
+
             _error_response(self, f"Unknown route: {html.escape(parsed.path)}", status=404)
         except Exception as exc:
             _error_response(self, str(exc), status=500)
@@ -1022,8 +1068,7 @@ class BenchmarkWebHandler(BaseHTTPRequestHandler):
 
 def run_smoke_test() -> int:
     print("Running benchmark web smoke test...")
-    print(generate_benchmark(samples_per_task=2, prompt_mode="agent_like"))
-    print(run_oracle_demo(tokenizer="note_level", include_explanations=True))
+    print(run_full_local_demo(samples_per_task=2, prompt_mode="agent_like", include_explanations=True))
     status = get_status_payload()
     print(json.dumps(status["runs"]["oracle"], ensure_ascii=False, indent=2))
     return 0

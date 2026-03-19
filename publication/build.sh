@@ -5,9 +5,10 @@ cd "$(dirname "$0")"
 
 PROJECT_ROOT="$(cd .. && pwd)"
 LOCAL_TECTONIC="$PROJECT_ROOT/.local/bin/tectonic"
+MAIN_TEX="symbolicMusicBenchmarkForMusicTheoryReasoningAndComputationalMusicology.tex"
 
 if [[ -x "$LOCAL_TECTONIC" ]]; then
-  "$LOCAL_TECTONIC" main.tex
+  "$LOCAL_TECTONIC" "$MAIN_TEX"
 else
-  tectonic main.tex
+  tectonic "$MAIN_TEX"
 fi

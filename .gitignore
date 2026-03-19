@@ -26,10 +26,10 @@ benchmark/data/raw_note_level/
 # Local toolchain/install artifacts
 .local/
 Miniconda3.sh
-docs/presentation/node_modules/
-docs/presentation/rendered/
-docs/presentation/roundtrip/
-docs/presentation/*-raw.pptx
+supporting-docs/presentation/node_modules/
+supporting-docs/presentation/rendered/
+supporting-docs/presentation/roundtrip/
+supporting-docs/presentation/*-raw.pptx
 
 # OS/editor noise
 .DS_Store
