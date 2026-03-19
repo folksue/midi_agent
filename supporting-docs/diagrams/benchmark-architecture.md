@@ -1,0 +1,59 @@
+# Benchmark Architecture
+
+```mermaid
+flowchart LR
+    subgraph Core["Benchmark Core"]
+        A["rules.py<br/>symbolic theory rules"]
+        B["task_specs.py<br/>task groups / label spaces"]
+        C["render.py<br/>prompt construction"]
+        D["tokenizers.py<br/>note_level / midilike / remilike"]
+        E["musicology.py<br/>reference explanations"]
+        F["predictions.py<br/>canonical prediction helpers"]
+    end
+
+    subgraph Data["Benchmark Data"]
+        G["raw note-level jsonl"]
+        H["tokenizer views"]
+        I["model-ready cases json"]
+    end
+
+    subgraph Runtime["Benchmark Runtime"]
+        J["run_api_model_list.py"]
+        K["run_ollama_model_list.py"]
+        L["predictions.jsonl"]
+    end
+
+    subgraph Eval["Evaluation and Analysis"]
+        M["eval_predictions.py"]
+        N["eval_sequence_predictions.py"]
+        O["annotate_model_outputs.py"]
+        P["overall / by_task / by_tokenizer"]
+        Q["cases_with_outputs / summary"]
+    end
+
+    subgraph Modes["Usage Modes"]
+        R["Standard mode<br/>prediction_label / prediction_notes"]
+        S["Explanatory mode<br/>optional prediction_explanation"]
+    end
+
+    A --> G
+    B --> I
+    C --> I
+    D --> H
+    E --> I
+    F --> J
+    F --> K
+    G --> H
+    H --> I
+    I --> J
+    I --> K
+    J --> L
+    K --> L
+    L --> M
+    L --> N
+    L --> O
+    M --> P
+    O --> Q
+    R --> M
+    S --> O
+```

@@ -127,3 +127,10 @@
 - [ ] 每任务样本规模
 - [ ] 是否先只做大调语境 (Task 3)
 - [ ] Voice-leading 是否先限定两声部再扩到 SATB
+
+## 11. 规则化输出约束（新增）
+- [ ] 为 Sequence 任务增加“硬约束输出”技术方案设计（不是仅提示词）
+- [ ] 本地模型路线: 基于 tokenizer-aware 约束解码（FSM/grammar + token mask）
+- [ ] API 路线: 结构化输出（JSON/schema）+ 校验重试 + 序列化回 token 串
+- [ ] 增加消融对比: 软约束 vs 硬约束（指标: parse_success / exact_match / truncation_rate）
+- [ ] 明确各 tokenizer 的合法 token 空间与状态转移表（`note_level`/`midilike`/`remilike`）

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import re
+
 from .core.rules import Note
 
 
@@ -8,13 +10,44 @@ def _fmt_d(d: float) -> str:
     return f"{float(d):.6f}".rstrip("0").rstrip(".")
 
 
+_PC_SHARP = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+_PC_BASE = {"C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11}
+_NOTE_RE = re.compile(r"^\s*([A-Ga-g])([#b]?)(-?\d+)\s*$")
+
+
+def _midi_to_note_name(pitch: int) -> str:
+    p = int(pitch)
+    pc = p % 12
+    octave = (p // 12) - 1
+    return f"{_PC_SHARP[pc]}{octave}"
+
+
+def _note_name_to_midi(token: str) -> int:
+    # Backward compatibility: allow plain midi integer tokens.
+    s = str(token).strip()
+    if re.fullmatch(r"-?\d+", s):
+        return int(s)
+    m = _NOTE_RE.match(s)
+    if not m:
+        raise ValueError(f"invalid note token: {token}")
+    base = m.group(1).upper()
+    accidental = m.group(2)
+    octave = int(m.group(3))
+    pc = _PC_BASE[base]
+    if accidental == "#":
+        pc += 1
+    elif accidental == "b":
+        pc -= 1
+    return (octave + 1) * 12 + (pc % 12)
+
+
 def encode_note_level_melody(melody: list[dict]) -> str:
     if melody and {"t", "p", "d", "v"}.issubset(melody[0].keys()):
         return " | ".join(
-            f"t={_fmt_d(float(n['t']))} d={_fmt_d(float(n['d']))} notes=[{int(n['p'])}] v={int(n['v'])}"
+            f"t={_fmt_d(float(n['t']))} d={_fmt_d(float(n['d']))} notes=[{_midi_to_note_name(int(n['p']))}] v={int(n['v'])}"
             for n in melody
         )
-    return " ".join(f"n{int(n['p'])}/{_fmt_d(float(n['d']))}" for n in melody)
+    return " ".join(f"n{_midi_to_note_name(int(n['p']))}/{_fmt_d(float(n['d']))}" for n in melody)
 
 
 def decode_note_level_melody(text: str) -> list[dict]:
@@ -31,7 +64,8 @@ def decode_note_level_melody(text: str) -> list[dict]:
                 t = float(parts[0].split("=", 1)[1])
                 d = float(parts[1].split("=", 1)[1])
                 notes_field = parts[2].split("=", 1)[1].strip()
-                p = int(notes_field.strip("[]").split(",")[0])
+                first_note = notes_field.strip("[]").split(",")[0].strip()
+                p = _note_name_to_midi(first_note)
                 v = int(parts[3].split("=", 1)[1])
                 out.append({"t": t, "p": p, "d": d, "v": v})
             except Exception:
@@ -41,7 +75,11 @@ def decode_note_level_melody(text: str) -> list[dict]:
         if "/" not in tok or not tok.startswith("n"):
             continue
         p_str, d_str = tok[1:].split("/", 1)
-        out.append({"p": int(p_str), "d": float(d_str), "t": 0.0, "v": 80})
+        try:
+            p = _note_name_to_midi(p_str)
+        except Exception:
+            continue
+        out.append({"p": p, "d": float(d_str), "t": 0.0, "v": 80})
     return out
 
 
@@ -110,7 +148,7 @@ def decode_remilike_melody(text: str) -> list[dict]:
 
 
 def encode_pitch_set_note_level(notes: list[int]) -> str:
-    return "[" + ",".join(str(int(n)) for n in notes) + "]"
+    return "[" + ",".join(_midi_to_note_name(int(n)) for n in notes) + "]"
 
 
 def encode_pitch_set_midilike(notes: list[int]) -> str:

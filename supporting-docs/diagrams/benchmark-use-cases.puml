@@ -1,0 +1,28 @@
+@startuml
+left to right direction
+title Benchmark Use Cases
+
+actor "Non-expert user" as User
+actor "Research user" as Researcher
+actor "Model developer" as Developer
+
+rectangle "Benchmark" {
+  usecase "Run the standard benchmark" as UC1
+  usecase "Inspect model-ready cases" as UC2
+  usecase "Evaluate predictions automatically" as UC3
+  usecase "Review annotated outputs" as UC4
+  usecase "Compare tokenizers or models" as UC5
+  usecase "Collect paper examples" as UC6
+  usecase "Inspect optional analytical explanations" as UC7
+}
+
+User --> UC1
+User --> UC3
+Researcher --> UC4
+Researcher --> UC6
+Researcher --> UC7
+Developer --> UC2
+Developer --> UC3
+Developer --> UC5
+
+@enduml

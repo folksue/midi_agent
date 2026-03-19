@@ -1,0 +1,112 @@
+{
+  "overall": {
+    "cases": 16,
+    "hit": 16,
+    "miss": 0,
+    "acc": 1.0,
+    "text_token_error_rate_avg": 0.0,
+    "text_char_error_rate_avg": 0.0,
+    "note_event_error_rate_avg": 0.0,
+    "match_status_counts": {
+      "hit": 16
+    }
+  },
+  "by_task": {
+    "task1_interval_identification": {
+      "cases": 2,
+      "hit": 2,
+      "miss": 0,
+      "acc": 1.0,
+      "text_token_error_rate_avg": 0.0,
+      "text_char_error_rate_avg": 0.0,
+      "note_event_error_rate_avg": null,
+      "match_status_counts": {
+        "hit": 2
+      }
+    },
+    "task2_chord_identification": {
+      "cases": 2,
+      "hit": 2,
+      "miss": 0,
+      "acc": 1.0,
+      "text_token_error_rate_avg": 0.0,
+      "text_char_error_rate_avg": 0.0,
+      "note_event_error_rate_avg": null,
+      "match_status_counts": {
+        "hit": 2
+      }
+    },
+    "task3_harmonic_function": {
+      "cases": 2,
+      "hit": 2,
+      "miss": 0,
+      "acc": 1.0,
+      "text_token_error_rate_avg": 0.0,
+      "text_char_error_rate_avg": 0.0,
+      "note_event_error_rate_avg": null,
+      "match_status_counts": {
+        "hit": 2
+      }
+    },
+    "task4_voice_leading": {
+      "cases": 2,
+      "hit": 2,
+      "miss": 0,
+      "acc": 1.0,
+      "text_token_error_rate_avg": 0.0,
+      "text_char_error_rate_avg": 0.0,
+      "note_event_error_rate_avg": null,
+      "match_status_counts": {
+        "hit": 2
+      }
+    },
+    "task5_transposition": {
+      "cases": 2,
+      "hit": 2,
+      "miss": 0,
+      "acc": 1.0,
+      "text_token_error_rate_avg": 0.0,
+      "text_char_error_rate_avg": 0.0,
+      "note_event_error_rate_avg": 0.0,
+      "match_status_counts": {
+        "hit": 2
+      }
+    },
+    "task6_melodic_inversion": {
+      "cases": 2,
+      "hit": 2,
+      "miss": 0,
+      "acc": 1.0,
+      "text_token_error_rate_avg": 0.0,
+      "text_char_error_rate_avg": 0.0,
+      "note_event_error_rate_avg": 0.0,
+      "match_status_counts": {
+        "hit": 2
+      }
+    },
+    "task7_retrograde": {
+      "cases": 2,
+      "hit": 2,
+      "miss": 0,
+      "acc": 1.0,
+      "text_token_error_rate_avg": 0.0,
+      "text_char_error_rate_avg": 0.0,
+      "note_event_error_rate_avg": 0.0,
+      "match_status_counts": {
+        "hit": 2
+      }
+    },
+    "task8_rhythm_scale": {
+      "cases": 2,
+      "hit": 2,
+      "miss": 0,
+      "acc": 1.0,
+      "text_token_error_rate_avg": 0.0,
+      "text_char_error_rate_avg": 0.0,
+      "note_event_error_rate_avg": 0.0,
+      "match_status_counts": {
+        "hit": 2
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "midi-agent-paper-proposal-presentation",
+  "private": true,
+  "scripts": {
+    "build-raw": "node paper-proposal-deck.js",
+    "build": "npm run build-raw && cd ../.. && bash scripts/repair_presentation_pptx.sh",
+    "render": "cd ../.. && bash scripts/render_presentation.sh",
+    "validate": "cd ../.. && bash scripts/validate_presentation.sh",
+    "export-diagrams": "cd ../.. && bash scripts/export_diagrams.sh"
+  },
+  "dependencies": {
+    "@mermaid-js/mermaid-cli": "^11.12.0",
+    "pptxgenjs": "^4.0.1"
+  }
+}

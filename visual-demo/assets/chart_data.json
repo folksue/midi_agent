@@ -1,0 +1,215 @@
+{
+  "overall_runs": [
+    {
+      "label": "oracle · remilike",
+      "family_label": "oracle",
+      "tokenizer": "remilike",
+      "source": "webui/oracle",
+      "accuracy": 1.0,
+      "cases": 16,
+      "updated_at": "2026-03-19 03:43:14"
+    },
+    {
+      "label": "oracle · midilike",
+      "family_label": "oracle",
+      "tokenizer": "midilike",
+      "source": "webui/oracle",
+      "accuracy": 1.0,
+      "cases": 16,
+      "updated_at": "2026-03-19 03:43:13"
+    },
+    {
+      "label": "oracle · note_level",
+      "family_label": "oracle",
+      "tokenizer": "note_level",
+      "source": "webui/oracle",
+      "accuracy": 1.0,
+      "cases": 16,
+      "updated_at": "2026-03-19 03:43:13"
+    }
+  ],
+  "task_average": [
+    {
+      "task": "task1_interval_identification",
+      "label": "interval identification",
+      "accuracy": 1.0,
+      "run_count": 3
+    },
+    {
+      "task": "task2_chord_identification",
+      "label": "chord identification",
+      "accuracy": 1.0,
+      "run_count": 3
+    },
+    {
+      "task": "task3_harmonic_function",
+      "label": "harmonic function",
+      "accuracy": 1.0,
+      "run_count": 3
+    },
+    {
+      "task": "task4_voice_leading",
+      "label": "voice leading",
+      "accuracy": 1.0,
+      "run_count": 3
+    },
+    {
+      "task": "task5_transposition",
+      "label": "transposition",
+      "accuracy": 1.0,
+      "run_count": 3
+    },
+    {
+      "task": "task6_melodic_inversion",
+      "label": "melodic inversion",
+      "accuracy": 1.0,
+      "run_count": 3
+    },
+    {
+      "task": "task7_retrograde",
+      "label": "retrograde",
+      "accuracy": 1.0,
+      "run_count": 3
+    },
+    {
+      "task": "task8_rhythm_scale",
+      "label": "rhythm scale",
+      "accuracy": 1.0,
+      "run_count": 3
+    }
+  ],
+  "task_by_run": {
+    "labels": [
+      "interval identification",
+      "chord identification",
+      "harmonic function",
+      "voice leading",
+      "transposition",
+      "melodic inversion",
+      "retrograde",
+      "rhythm scale"
+    ],
+    "datasets": [
+      {
+        "label": "oracle · remilike",
+        "tokenizer": "remilike",
+        "source": "webui/oracle",
+        "data": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "label": "oracle · midilike",
+        "tokenizer": "midilike",
+        "source": "webui/oracle",
+        "data": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "label": "oracle · note_level",
+        "tokenizer": "note_level",
+        "source": "webui/oracle",
+        "data": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "tokenizer_comparison": {
+    "labels": [
+      "note_level",
+      "midilike",
+      "remilike"
+    ],
+    "datasets": [
+      {
+        "label": "oracle",
+        "source": "webui/oracle",
+        "data": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "heatmap": {
+    "rows": [
+      "oracle · remilike",
+      "oracle · midilike",
+      "oracle · note_level"
+    ],
+    "cols": [
+      "interval identification",
+      "chord identification",
+      "harmonic function",
+      "voice leading",
+      "transposition",
+      "melodic inversion",
+      "retrograde",
+      "rhythm scale"
+    ],
+    "values": [
+      [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    ]
+  },
+  "source_counts": {
+    "labels": [
+      "webui/oracle"
+    ],
+    "data": [
+      3
+    ]
+  }
+}

@@ -5,6 +5,7 @@ import argparse
 import json
 from pathlib import Path
 
+from benchmark.core.render import compose_user_prompt_from_parts, render_user_prompt_parts
 from benchmark.tokenizers import render_by_tokenizer
 
 TASK_GROUPS = {
@@ -12,24 +13,38 @@ TASK_GROUPS = {
         "task1_interval_identification",
         "task2_chord_identification",
         "task3_harmonic_function",
-        "task4_transposition",
-        "task5_melodic_inversion",
-        "task6_retrograde",
-        "task7_rhythm_scale",
-        "task8_voice_leading",
+        "task5_transposition",
+        "task6_melodic_inversion",
+        "task7_retrograde",
+        "task8_rhythm_scale",
+        "task4_voice_leading",
     },
     "label": {
         "task1_interval_identification",
         "task2_chord_identification",
         "task3_harmonic_function",
-        "task8_voice_leading",
+        "task4_voice_leading",
     },
     "sequence": {
-        "task4_transposition",
-        "task5_melodic_inversion",
-        "task6_retrograde",
-        "task7_rhythm_scale",
+        "task5_transposition",
+        "task6_melodic_inversion",
+        "task7_retrograde",
+        "task8_rhythm_scale",
     },
+}
+
+LABEL_TASKS = {
+    "task1_interval_identification",
+    "task2_chord_identification",
+    "task3_harmonic_function",
+    "task4_voice_leading",
+}
+
+SEQUENCE_TASKS = {
+    "task5_transposition",
+    "task6_melodic_inversion",
+    "task7_retrograde",
+    "task8_rhythm_scale",
 }
 
 
@@ -70,52 +85,21 @@ def main() -> int:
         if task not in selected_tasks:
             continue
         system_prompt = r.get("system_prompt", "")
-        user_prompt = r.get("user_prompt", r.get("input", ""))
         ground_truth = r.get("ground_truth", r.get("target", ""))
         tokenizer = str(r.get("meta", {}).get("tokenizer", "unknown"))
         prompt_mode = str(r.get("meta", {}).get("prompt_mode", "light"))
         payload = r.get("payload", {}) or {}
         target_payload = r.get("target_payload", {})
+        prompt_parts = render_user_prompt_parts(task, payload, tokenizer=tokenizer, prompt_mode=prompt_mode)
+        user_prompt = compose_user_prompt_from_parts(prompt_parts)
 
-        melody_input_tokens = ""
         melody_target_tokens = ""
-        if isinstance(payload, dict) and isinstance(payload.get("melody"), list):
-            melody_input_tokens = render_by_tokenizer(tokenizer, payload["melody"])
-        if isinstance(target_payload, list):
+        if task in SEQUENCE_TASKS and isinstance(target_payload, list):
             melody_target_tokens = render_by_tokenizer(tokenizer, target_payload)
 
-        control_params = {}
-        for k in ("source_key", "target_key", "pivot", "factor"):
-            if k in payload:
-                control_params[k] = payload[k]
-
-        question_prefix = f"Task={task}\nTokenizer={tokenizer}\nAnswer with only one line final output."
-        question_body = ""
-        if task == "task4_transposition":
-            question_body = "Transposition"
-        elif task == "task5_melodic_inversion":
-            question_body = "Melodic Inversion"
-        elif task == "task6_retrograde":
-            question_body = "Retrograde"
-        elif task == "task7_rhythm_scale":
-            question_body = "Rhythm Scale"
-
-        prompt_parts = {
-            "question_prefix": question_prefix,
-            "question_body": question_body,
-            "control_params": control_params,
-            "melody_input_tokens": melody_input_tokens,
-            "answer_constraint": "Return only transformed melody tokens, one line.",
-        }
-
-        # Build an optional recomposed prompt from prompt_parts for ablation experiments.
-        param_line = " ".join(f"{k}={v}" for k, v in control_params.items())
-        composed_lines = [question_prefix, "Question:", question_body]
-        if param_line:
-            composed_lines.append(param_line)
-        if melody_input_tokens:
-            composed_lines.append(f"melody={melody_input_tokens}")
-        user_prompt_recomposed = "\n".join(composed_lines)
+        control_params = dict(prompt_parts.get("control_params", {}))
+        melody_input_tokens = str(prompt_parts.get("melody_input_tokens", ""))
+        user_prompt_recomposed = user_prompt
 
         case = {
             "case_id": r["id"],
@@ -136,8 +120,6 @@ def main() -> int:
             "melody_target_tokens": melody_target_tokens,
             "control_params": control_params,
             "ground_truth": ground_truth,
-            "input_tokenized": r.get("input_tokenized", r.get("input", "")),
-            "output_tokenized": r.get("output_tokenized", r.get("target", "")),
             "payload": payload,
             "target_payload": target_payload,
         }

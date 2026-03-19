@@ -5,14 +5,8 @@ import argparse
 import json
 from pathlib import Path
 
-from benchmark.tokenizers import decode_melody_by_tokenizer
-
-SEQ_TASKS = {
-    "task4_transposition",
-    "task5_melodic_inversion",
-    "task6_retrograde",
-    "task7_rhythm_scale",
-}
+from benchmark.core.predictions import get_prediction_explanation, get_prediction_label, get_prediction_notes
+from benchmark.core.task_specs import SEQUENCE_TASKS
 
 
 def parse_args() -> argparse.Namespace:
@@ -45,10 +39,10 @@ def _load_cases(path: Path) -> list[dict]:
     return data
 
 
-def _load_pred_map(path: Path) -> dict[str, str]:
+def _load_pred_map(path: Path) -> dict[str, dict]:
     if not path.exists():
         raise FileNotFoundError(path)
-    out: dict[str, str] = {}
+    out: dict[str, dict] = {}
     for ln in path.read_text(encoding="utf-8").splitlines():
         if not ln.strip():
             continue
@@ -56,12 +50,7 @@ def _load_pred_map(path: Path) -> dict[str, str]:
         rid = str(row.get("case_id") or row.get("id") or "")
         if not rid:
             continue
-        pred = ""
-        for k in ("prediction", "output", "pred", "answer"):
-            if k in row:
-                pred = str(row[k])
-                break
-        out[rid] = pred
+        out[rid] = row
     return out
 
 
@@ -145,8 +134,13 @@ def _note_event_error_rate(pred_events: list[dict], ref_events: list[dict]) -> f
     return dist / len(ref_tokens)
 
 
-def _hit_with_reason(case: dict, model_output: str, match_mode: str) -> tuple[bool, str, str]:
+def _hit_with_reason(case: dict, pred_row: dict, match_mode: str) -> tuple[bool, str, str]:
     task = str(case.get("task", ""))
+    model_output = (
+        get_prediction_label(pred_row, task)
+        if task not in SEQUENCE_TASKS
+        else str(pred_row.get("prediction_notes") or pred_row.get("prediction") or "").strip()
+    )
     if not str(model_output).strip():
         return False, "missing_output", "model_output is empty"
 
@@ -154,12 +148,12 @@ def _hit_with_reason(case: dict, model_output: str, match_mode: str) -> tuple[bo
         ok = _text_norm(model_output) == _text_norm(str(case.get("ground_truth", "")))
         return (True, "hit", "text_equal") if ok else (False, "mismatch", "text_not_equal")
 
-    if match_mode == "semantic" or (match_mode == "auto" and task in SEQ_TASKS):
+    if match_mode == "semantic" or (match_mode == "auto" and task in SEQUENCE_TASKS):
         tokenizer = str(case.get("tokenizer", "note_level"))
         ref = case.get("target_payload")
         if isinstance(ref, list):
             try:
-                pred = decode_melody_by_tokenizer(tokenizer, model_output)
+                pred = get_prediction_notes(pred_row, task, tokenizer)
             except Exception as exc:
                 return False, "decode_error", f"{type(exc).__name__}: {exc}"
             ok = _events_equal(pred, ref)
@@ -205,9 +199,16 @@ def main() -> int:
         tstat["cases"] += 1
 
         rid = str(c.get("case_id") or c.get("id") or "")
-        model_output = pred_map.get(rid, "")
-        ok, status, detail = _hit_with_reason(c, model_output, args.match_mode)
+        pred_row = pred_map.get(rid, {})
+        model_output = (
+            get_prediction_label(pred_row, str(c.get("task", "")))
+            if str(c.get("task", "")) not in SEQUENCE_TASKS
+            else str(pred_row.get("prediction_notes") or pred_row.get("prediction") or "")
+        )
+        ok, status, detail = _hit_with_reason(c, pred_row, args.match_mode)
         c["model_output"] = model_output
+        if get_prediction_explanation(pred_row):
+            c["prediction_explanation"] = get_prediction_explanation(pred_row)
         c["hit_ground_truth"] = bool(ok)
         c["match_status"] = status
         c["match_detail"] = detail
@@ -220,10 +221,10 @@ def main() -> int:
         tstat["text_cer_sum"] += c["text_char_error_rate"]
 
         # Sequence-task note-specialized TER (event-level).
-        if str(c.get("task", "")) in SEQ_TASKS and isinstance(c.get("target_payload"), list):
+        if str(c.get("task", "")) in SEQUENCE_TASKS and isinstance(c.get("target_payload"), list):
             tokenizer = str(c.get("tokenizer", "note_level"))
             try:
-                pred_ev = decode_melody_by_tokenizer(tokenizer, model_output)
+                pred_ev = get_prediction_notes(pred_row, str(c.get("task", "")), tokenizer)
                 ref_ev = c["target_payload"]
                 c["note_event_error_rate"] = _note_event_error_rate(pred_ev, ref_ev)
                 note_event_ter_sum += c["note_event_error_rate"]

@@ -1,0 +1,25 @@
+flowchart LR
+    subgraph Actors["Actors"]
+        U["Non-expert user"]
+        R["Research user"]
+        D["Model developer"]
+    end
+
+    subgraph Cases["Benchmark use cases"]
+        C1("Run the standard benchmark")
+        C2("Inspect model-ready cases")
+        C3("Evaluate predictions automatically")
+        C4("Review annotated outputs")
+        C5("Compare tokenizers or models")
+        C6("Collect paper examples")
+        C7("Inspect optional analytical explanations")
+    end
+
+    U --> C1
+    U --> C3
+    R --> C4
+    R --> C6
+    R --> C7
+    D --> C2
+    D --> C3
+    D --> C5
