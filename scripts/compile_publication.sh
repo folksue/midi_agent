@@ -2,8 +2,7 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-PAPER_BASENAME="symbolicMusicBenchmarkForMusicTheoryReasoningAndComputationalMusicology"
-PDF_FILE="${REPO_ROOT}/${PAPER_BASENAME}.pdf"
+PDF_FILE="${REPO_ROOT}/publication/main.pdf"
 
 echo "[compile] building publication via publication/build.sh"
 "${REPO_ROOT}/publication/build.sh"
