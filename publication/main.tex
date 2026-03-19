@@ -7,7 +7,7 @@
 \usepackage{booktabs}
 \usepackage{color}
 
-\title{A Symbolic Music-Theory Benchmark for Computational Musicology and LLM Evaluation}
+\title{A Symbolic Music Benchmark for Music Theory Reasoning and Computational Musicology}
 
 \oneauthor
   {Anonymous Authors}
@@ -22,24 +22,30 @@
 \maketitle
 
 \begin{abstract}
-We present a symbolic benchmark for evaluating whether large language models can identify, manipulate, and explain core music-theoretical structures. The benchmark contains eight zero-shot tasks spanning interval identification, chord identification, harmonic-function classification, transposition, melodic inversion, retrograde, rhythmic scaling, and voice-leading violation detection. We organize these tasks into two output families: label classification and note-sequence transformation. The benchmark is designed around automatically verifiable symbolic inputs and outputs, with task-specific metrics and a unified evaluation pipeline. In addition to the standard benchmark mode, which prioritizes strict reproducibility, we introduce an optional explanation layer that supports qualitative analysis of musicological reasoning without affecting the main score. We frame the current release as a deliberately constrained V1 scope: harmonic function is limited to major mode, voice-leading is simplified to two voices, and harmonic vocabulary is reduced to a stable subset of tonal sonorities. This design enables reproducible evaluation today while leaving space for future expansions in analytical coverage. The resulting benchmark is intended both as an engineering artifact for model comparison and as a computational musicology instrument for studying the gap between structural correctness and analytical explanation.
+We present a symbolic benchmark for evaluating whether large language models can identify, manipulate, and explain core music theoretical structures. 
+The benchmark contains eight zero-shot tasks spanning: interval identification, chord identification, harmonic-function classification, transposition, melodic inversion, retrograde, rhythmic scaling and voice-leading violation detection. 
+These tasks are organized into two output families: label classification and note-sequence transformation; under a unified prediction schema and evaluation pipeline. Because all cases are symbolic and verifiable by rules, the benchmark supports reproducible scoring with specific task metrics while remaining simple to run. 
+Beyond the standard benchmark mode, we include an optional explanation layer for qualitative analysis of musicological reasoning. 
+We frame the current release as a deliberately constrained V1 (version 1) scope, where: harmonic function is limited to major mode, voice leading is simplified to two voices, and harmonic vocabulary is reduced to a stable subset of tonal sonorities. 
+This scope is narrow enough for robust evaluation yet broad enough to support musicological discussion. 
+The benchmark is intended both as a resource to compare models and as a computational musicology tool for studying the gap between structural correctness and analytical explanation.
 \end{abstract}
 
 \section{Introduction}
 \label{sec:introduction}
 
-Recent work in symbolic music modeling has improved tokenization, generation, and pretraining strategies, but benchmark design for \emph{music-theoretical reasoning} remains underdeveloped. Many symbolic systems can generate convincing musical continuations, yet it is often unclear whether they can reliably identify analytical categories such as harmonic function, or apply explicit transformational rules such as inversion and retrograde under controlled conditions.
+Benchmarking has long played an important role in MIR research, from community-wide evaluations (such as MIREX) to more focused datasets and challenge tasks \cite{peeters2025mir}. In symbolic music modeling, recent work has improved tokenization, generation, and pretraining strategies, but benchmark design for \emph{music theory reasoning} remains underdeveloped. Many symbolic systems can generate convincing musical continuations, yet it is often unclear whether they can reliably identify analytical categories such as harmonic function, or apply explicit transformational rules such as inversion and retrograde under controlled conditions.
 
-This paper introduces a symbolic benchmark centered on a simple question: \emph{can language models correctly capture and manipulate core music-theoretical structures, and does structural correctness align with meaningful analytical reasoning?} The benchmark focuses on symbolic input rather than audio so that ground truth can be generated and verified with rule-based logic. This choice does not claim that audio is unimportant; rather, it provides a controlled first step toward reproducible evaluation.
+This paper introduces a symbolic benchmark centered on a simple question: \emph{can language models correctly capture and manipulate core music theory structures, and does structural correctness align with meaningful analytical reasoning?} The benchmark focuses on symbolic input rather than audio so that ground truth can be generated and verified with rule-based logic. This choice does not claim that audio is unimportant; rather, it provides a controlled first step toward reproducible evaluation.
 
 Our contribution has three parts. First, we operationalize foundational concepts from music theory as benchmark tasks with stable input-output contracts. Second, we provide a multi-task evaluation pipeline that supports both label prediction and note-sequence transformation under a shared interface. Third, we separate formal correctness from analytical explanation through an optional explanation layer, allowing the benchmark to support both strict evaluation and musicology-facing qualitative analysis.
 
 \section{Related Work}
 \label{sec:related_work}
 
-Symbolic music research has produced strong representational and modeling frameworks, including event-based tokenizations such as REMI and pretrained symbolic models such as MusicBERT \cite{huang2020pop, huang2021musicbert}. These systems have broadened the scope of symbolic music generation and understanding, but much of the evaluation still emphasizes generation quality, continuation quality, or downstream predictive performance rather than direct assessment of music-theoretical reasoning.
+Symbolic music research has produced strong representational and modeling frameworks, including event based tokenizations such as REMI and pretrained symbolic models such as MusicBERT \cite{huang2020pop, huang2021musicbert}. These systems broaden the scope of symbolic music generation and understanding, but much of the evaluation still emphasizes generation quality, continuation quality, or downstream predictive performance rather than direct assessment of music-theoretical reasoning.
 
-More broadly, recent language-model evaluation research has emphasized benchmark design, structured outputs, and reproducibility \cite{liang2023holistic}. Our work brings that benchmarking perspective into symbolic music reasoning by defining tasks that remain close to recognizable analytical concepts from music theory while still being machine-checkable.
+More broadly, language model evaluation research has emphasized benchmark design, structured outputs, and reproducibility \cite{liang2023holistic}. Our work brings that benchmarking perspective into symbolic music reasoning by defining tasks that remain close to recognizable analytical concepts from music theory while still being machine-checkable. It also aligns with MIR's broader benchmark culture \cite{peeters2025mir}, but focuses specifically on symbolic theory tasks rather than audio classification, retrieval, or generation quality.
 
 The proposed benchmark is therefore not a new symbolic representation model. Instead, it is an evaluation resource intended to support comparison across models, tokenizers, and prompting conditions, while also enabling discussion of what counts as musical understanding in a symbolic setting.
 
@@ -66,6 +72,10 @@ Sequence transformation tasks require the model to generate a transformed note s
 
 The benchmark uses a canonical prediction interface. Label tasks return \texttt{prediction\_label}; sequence tasks return \texttt{prediction\_notes}; and an optional \texttt{prediction\_explanation} field can be added for qualitative analytical output without affecting the primary metric.
 
+\subsection{Example Inputs and Outputs}
+
+The benchmark is designed to stay legible to both researchers and non-expert users. A label task may present two symbolic notes and ask for an interval such as \texttt{perfect\_fifth}. A sequence task may present a melody together with a control parameter such as a target key or inversion pivot, and require a transformed note sequence as output. These concrete input-output contracts make prompt construction and evaluation easy to audit.
+
 \subsection{Representations and Views}
 
 Each benchmark case is produced in a raw note-level representation and then exported into multiple tokenizer views, including \texttt{note\_level}, \texttt{midilike}, and \texttt{remilike}. These alternative views allow us to ask whether representational choices influence benchmark performance, rather than treating symbolic input as a single fixed format.
@@ -86,7 +96,7 @@ These simplifications are methodological rather than theoretical claims about mu
 \section{Pipeline and Reproducibility}
 \label{sec:pipeline}
 
-The benchmark is implemented as a rule-based pipeline. A generator produces canonical cases at the raw symbolic level. These are then exported to tokenizer-specific views and converted into model-ready JSON cases. Model predictions are evaluated by a unified script that aggregates overall accuracy, task-level summaries, and tokenizer-level summaries. Additional annotation scripts attach model outputs back to the original cases and record whether the prediction exactly matches the reference target.
+The benchmark is implemented as a rule-based pipeline. A generator produces canonical cases at the raw symbolic level. These are then exported to tokenizer-specific views and converted into model-ready JSON cases. Model predictions are evaluated by a unified script that aggregates overall accuracy, task-level summaries, and tokenizer-level summaries. Additional annotation scripts attach model outputs back to the original cases and record whether the prediction exactly matches the reference target. The main output products are therefore not just a single score, but a compact set of artifacts that support both quantitative comparison and qualitative inspection.
 
 The repository includes both a command-line workflow and a lightweight browser-based interface for local experimentation. The local web UI can generate benchmark data, run an oracle demo from ground truth, and evaluate user-provided prediction files. A static GitHub Pages dashboard can publish benchmark snapshots and oracle-demo outputs for public inspection, though live execution still requires a local or hosted backend.
 
@@ -99,12 +109,13 @@ The benchmark combines a unified evaluator with task-appropriate metrics. Label 
   \centering
   \caption{Task groups, primary outputs, and core evaluation logic.}
   \label{tab:tasks}
-  \begin{tabular}{p{0.28\columnwidth}p{0.22\columnwidth}p{0.34\columnwidth}}
+  \small
+  \begin{tabular}{p{0.25\columnwidth}p{0.19\columnwidth}p{0.37\columnwidth}}
     \toprule
     Task group & Output & Core metric \\
     \midrule
-    Interval / chord / function / voice-leading & \texttt{prediction\_label} & Accuracy, exact match, macro F1 where applicable \\
-    Transposition / inversion / retrograde / rhythm scale & \texttt{prediction\_notes} & Exact match, plus task-specific sequence metrics \\
+    Label tasks & \texttt{prediction\_label} & Accuracy, exact match, macro F1 where needed \\
+    Sequence tasks & \texttt{prediction\_notes} & Exact match plus task-specific sequence metrics \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -121,7 +132,7 @@ The optional explanation layer extends this framing. A model can predict the sam
 \section{Preliminary Validation and Expected Outcomes}
 \label{sec:results}
 
-At the current stage, the benchmark has been validated as a pipeline artifact through oracle predictions and local benchmark runs. Oracle predictions achieve perfect performance by construction and confirm that the evaluation scripts, prediction schema, and annotation pipeline are internally consistent. Comparative model experiments are ongoing, and the main expected outcome is not a single leaderboard claim but a structured picture of which tasks are easy or difficult across models and tokenizer views.
+At the current stage, the benchmark has been validated as a pipeline artifact through oracle predictions and local benchmark runs. Oracle predictions achieve perfect performance by construction and confirm that the evaluation scripts, prediction schema, and annotation pipeline are internally consistent. Comparative model experiments are ongoing, and the main expected outcome is not a single leaderboard claim but a structured picture of which tasks are easy or difficult across models and tokenizer views. For this reason, current quantitative observations are better interpreted as evidence that the benchmark is sensitive to differences in task type, representation, and model behavior than as final performance claims.
 
 We expect the benchmark to reveal at least three patterns. First, tokenizer choice may influence performance for some transformation tasks. Second, classification and transformation tasks may stress different model capabilities. Third, explanation quality may diverge from symbolic correctness even when the final label is correct, especially in tasks grounded in tonal interpretation.
 
@@ -140,7 +151,7 @@ We presented a symbolic benchmark for music theory and computational musicology 
 \section{AI Usage Statement}
 \label{sec:ai}
 
-This project includes code-generation and drafting support tools used for prototyping documentation, scripts, and benchmark-facing interfaces. All benchmark definitions, evaluation logic, and manuscript content should be manually reviewed by the authors before submission.
+This project includes code-generation and drafting support tools used for prototyping documentation, scripts, and benchmark facing interfaces. All benchmark definitions, evaluation logic, and manuscript content should be manually reviewed by the authors before submission.
 
 \bibliographystyle{IEEEtran}
 \bibliography{references}

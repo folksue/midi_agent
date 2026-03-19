@@ -34,3 +34,19 @@ pdflatex main.tex
 - The draft currently uses anonymized author metadata for a submission-style version.
 - The related-work section is intentionally compact and should be expanded before submission.
 - The results section is framed as preliminary validation plus expected outcomes, not as a final empirical paper.
+- The current draft compiles to 3 pages total, which stays below the temporary 4-page target for this version.
+
+## Current reference set
+
+The current bibliography is intentionally small and focused:
+
+- `peeters2025mir`
+  - motivates MIR benchmarking culture and evaluation practice
+- `huang2020pop`
+  - covers event-based symbolic representation through Pop Music Transformer / REMI-style modeling
+- `huang2021musicbert`
+  - covers pretrained symbolic music understanding
+- `liang2023holistic`
+  - supports the benchmark-design and multi-metric evaluation framing
+
+Before a real submission, add more references on symbolic music reasoning, theory-aware evaluation, and computational musicology where appropriate.
